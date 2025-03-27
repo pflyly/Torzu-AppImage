@@ -23,11 +23,13 @@ fi
 
 (
 	cd ./torzu
-	COMM_HASH="$(git rev-parse --short HEAD)"
+      	COMM_HASH="$(git rev-parse --short HEAD)"
         BUILD_DATE="$(date +"%Y%m%d")"
 	VERSION="${COMM_HASH}"
         DATE="${BUILD_DATE}"
 	git submodule update --init --recursive -j$(nproc)
+        #Replaces 'boost::asio::io_service' with 'boost::asio::io_context' for compatibility with Boost.ASIO versions 1.74.0 and later
+	find src -type f -name '*.cpp' -exec sed -i 's/boost::asio::io_service/boost::asio::io_context/g' {} \;
 	mkdir build
 	cd build
 	cmake .. -GNinja \
