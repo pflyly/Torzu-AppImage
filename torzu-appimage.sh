@@ -10,17 +10,22 @@ URUNTIME=$(wget -q https://api.github.com/repos/VHSgunzo/uruntime/releases -O - 
 ICON="https://notabug.org/litucks/torzu/raw/02cfee3f184e6fdcc3b483ef399fb5d2bb1e8ec7/dist/yuzu.png"
 ICON_BACKUP="https://free-git.org/Emulator-Archive/torzu/raw/branch/master/dist/yuzu.png"
 
+# Check for optimized build flag
 if [ "$1" = 'v3' ]; then
 	echo "Making optimized build of torzu"
         ARCH_FLAGS="-march=znver2 -mtune=znver2 -O3 -ffast-math -flto=auto"
+else
+	ARCH_FLAGS=""
 fi
+
 UPINFO="gh-releases-zsync|$(echo "$GITHUB_REPOSITORY" | tr '/' '|')|latest|*$ARCH.AppImage.zsync"
 
-# BUILD TORZU
+# Clone the Torzu repository from notabug mirror if it doesn't exist
 if [ ! -d ./torzu ]; then
 	git clone --depth 1 https://notabug.org/litucks/torzu.git
 fi
 
+# Build Torzu
 (
 	cd ./torzu
       	COMM_HASH="$(git rev-parse --short HEAD)"
@@ -28,13 +33,15 @@ fi
 	git submodule update --init --recursive -j$(nproc)
         #Replaces 'boost::asio::io_service' with 'boost::asio::io_context' for compatibility with Boost.ASIO versions 1.74.0 and later
 	find src -type f -name '*.cpp' -exec sed -i 's/boost::asio::io_service/boost::asio::io_context/g' {} \;
-	mkdir build
+	
+        mkdir build
 	cd build
 	cmake .. -GNinja \
 		-DYUZU_USE_BUNDLED_VCPKG=OFF \
 		-DYUZU_USE_BUNDLED_QT=OFF \
 		-DYUZU_USE_BUNDLED_FFMPEG=OFF \
 		-DYUZU_TESTS=OFF \
+                -DYUZU_CMD=OFF \
 		-DYUZU_CHECK_SUBMODULES=OFF \
 		-DYUZU_USE_LLVM_DEMANGLE=OFF \
                 -DYUZU_USE_BUNDLED_SDL2=ON \
@@ -55,7 +62,7 @@ VERSION="$(cat ~/version)"
 
 # NOW MAKE APPIMAGE
 cd ..
-mkdir ./AppDir
+mkdir -p ./AppDir
 cd ./AppDir
 
 echo '[Desktop Entry]
@@ -72,6 +79,7 @@ MimeType=application/x-nx-nro;application/x-nx-nso;application/x-nx-nsp;applicat
 Keywords=Nintendo;Switch;
 StartupWMClass=yuzu' > ./torzu.desktop
 
+# Download Icon
 if ! wget --retry-connrefused --tries=30 "$ICON" -O torzu.png; then
 	if ! wget --retry-connrefused --tries=30 "$ICON_BACKUP" -O torzu.png; then
 		echo "kek"
