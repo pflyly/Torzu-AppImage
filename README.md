@@ -6,8 +6,8 @@ Another **PGO** optimization Build will be built locally via Citron_PGO_maker.sh
 
 Due the complexity of PGO two phase building, it can't be built automatically through CI for now.
 
-* [Latest Nightly Release](https://github.com/pflyly/Citron-AppImage/releases/tag/nightly)
-* [Latest Stable Release](https://github.com/pflyly/Citron-AppImage/releases/latest)
+* [Latest Nightly Release](https://github.com/pflyly/Torzu-AppImage/releases/tag/nightly)
+* [Latest Stable Release](https://github.com/pflyly/Torzu-AppImage/releases/latest)
 
 ---------------------------------------------------------------
 
