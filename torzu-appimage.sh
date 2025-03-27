@@ -24,9 +24,7 @@ fi
 (
 	cd ./torzu
       	COMM_HASH="$(git rev-parse --short HEAD)"
-        BUILD_DATE="$(date +"%Y%m%d")"
 	VERSION="${COMM_HASH}"
-        DATE="${BUILD_DATE}"
 	git submodule update --init --recursive -j$(nproc)
         #Replaces 'boost::asio::io_service' with 'boost::asio::io_context' for compatibility with Boost.ASIO versions 1.74.0 and later
 	find src -type f -name '*.cpp' -exec sed -i 's/boost::asio::io_service/boost::asio::io_context/g' {} \;
@@ -51,11 +49,9 @@ fi
 	ninja
 	sudo ninja install
 	echo "$VERSION" >~/version
-        echo "$DATE" >~/date
 )
 rm -rf ./torzu
 VERSION="$(cat ~/version)"
-DATE="$(cat ~/date)"
 
 # NOW MAKE APPIMAGE
 cd ..
@@ -129,7 +125,7 @@ echo "Generating AppImage..."
 	--no-history --no-create-timestamp \
 	--compression zstd:level=22 -S23 -B16 \
 	--header uruntime \
-	-i ./AppDir -o Torzu-"$VERSION"-"$DATE"-Steamdeck-"$ARCH".AppImage
+	-i ./AppDir -o Torzu-"$VERSION"-Steamdeck-"$ARCH".AppImage
 
 echo "Generating zsync file..."
 zsyncmake *.AppImage -u *.AppImage
