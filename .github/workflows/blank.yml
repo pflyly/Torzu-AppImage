@@ -44,6 +44,7 @@ jobs:
           qt6 \
           qt5-base \
           qt5-tools \
+          qttools5-dev \
           qt6-svg \
           qt6-declarative \
           qt5-webengine \
