@@ -6,8 +6,10 @@ Another **PGO** optimization Build will be built locally via Torzu_PGO_maker.sh 
 
 Due the complexity of PGO two phase building, it can't be built automatically through CI for now.
 
+
 * [Latest Normal Release](https://github.com/pflyly/Torzu-AppImage/releases/tag/Normal_Build)
 * [Latest PGO_Optimized Release](https://github.com/pflyly/Torzu-AppImage/releases/latest)
+
 
 ---------------------------------------------------------------
 
