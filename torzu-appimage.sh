@@ -61,8 +61,7 @@ rm -rf ./torzu
 VERSION="$(cat ~/version)"
 
 # NOW MAKE APPIMAGE
-cd ..
-mkdir -p ./AppDir
+mkdir ./AppDir
 cd ./AppDir
 
 echo '[Desktop Entry]
