@@ -1,6 +1,13 @@
-# Torzu-AppImage
+# Torzu-AppImage-Optimized-for-Steamdeck
 
-This repository makes builds for **x86_64** (generic) and **x86_64_v3**. If your CPU is less than 10 years old use the x86_64_v3 build since it has a significant performance boost.
+This repository makes builds with several flags of optimization especially for **Steamdeck**.
+
+Another **PGO** optimization Build will be built locally via Torzu_PGO_maker.sh script(which can be found in this repo) on a Steamdeck Oled and add to the relase page manually.
+
+Due the complexity of PGO two phase building, it can't be built automatically through CI for now.
+
+* [Latest Nightly Release](https://github.com/pflyly/Torzu-AppImage/releases/tag/nightly)
+* [Latest Stable Release](https://github.com/pflyly/Torzu-AppImage/releases/latest)
 
 ---------------------------------------------------------------
 

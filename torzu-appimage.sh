@@ -10,40 +10,59 @@ URUNTIME=$(wget -q https://api.github.com/repos/VHSgunzo/uruntime/releases -O - 
 ICON="https://notabug.org/litucks/torzu/raw/02cfee3f184e6fdcc3b483ef399fb5d2bb1e8ec7/dist/yuzu.png"
 ICON_BACKUP="https://free-git.org/Emulator-Archive/torzu/raw/branch/master/dist/yuzu.png"
 
+# Check for optimized build flag
 if [ "$1" = 'v3' ]; then
-	echo "Making x86-64-v3 build of torzu"
-	ARCH="${ARCH}_v3"
+	echo "Making optimized build of torzu"
+        ARCH_FLAGS="-march=znver2 -mtune=znver2 -O3 -ffast-math -flto=auto"
+else
+	ARCH_FLAGS=""
 fi
+
 UPINFO="gh-releases-zsync|$(echo "$GITHUB_REPOSITORY" | tr '/' '|')|latest|*$ARCH.AppImage.zsync"
 
-# BUILD TORZU
+# Clone the Torzu repository from notabug mirror if it doesn't exist
 if [ ! -d ./torzu ]; then
-	git clone https://aur.archlinux.org/torzu-git.git torzu
+	git clone --depth 1 https://notabug.org/litucks/torzu.git
 fi
-cd ./torzu
 
-if [ "$1" = 'v3' ]; then
-	sed -i 's/-march=[^"]*/-march=x86-64-v3/' ./PKGBUILD
-	sudo sed -i 's/-march=x86-64 /-march=x86-64-v3 /' /etc/makepkg.conf # Do I need to do this as well?
-	cat /etc/makepkg.conf
-else
-	sed -i 's/-march=[^"]*/-march=x86-64/' ./PKGBUILD
-fi
-sed -i 's/-DYUZU_USE_EXTERNAL_VULKAN_SPIRV_TOOLS=OFF/-DYUZU_USE_EXTERNAL_VULKAN_SPIRV_TOOLS=ON/' ./PKGBUILD
-if ! grep -q -- '-O3' ./PKGBUILD; then
-	sed -i 's/-march=/-O3 -march=/' ./PKGBUILD
-fi
-cat ./PKGBUILD
-
-makepkg -f
-sudo pacman --noconfirm -U *.pkg.tar.*
-ls .
-export VERSION="$(awk -F'=' '/pkgver=/{print $2; exit}' ./PKGBUILD)"
-echo "$VERSION" > ~/version
-cd ..
+# Build Torzu
+(
+	cd ./torzu
+      	COMM_HASH="$(git rev-parse --short HEAD)"
+	VERSION="${COMM_HASH}"
+	git submodule update --init --recursive -j$(nproc)
+        #Replaces 'boost::asio::io_service' with 'boost::asio::io_context' for compatibility with Boost.ASIO versions 1.74.0 and later
+	find src -type f -name '*.cpp' -exec sed -i 's/boost::asio::io_service/boost::asio::io_context/g' {} \;
+	
+        mkdir build
+	cd build
+	cmake .. -GNinja \
+		-DYUZU_USE_BUNDLED_VCPKG=OFF \
+		-DYUZU_USE_BUNDLED_QT=OFF \
+		-DYUZU_USE_BUNDLED_FFMPEG=OFF \
+		-DYUZU_TESTS=OFF \
+                -DYUZU_CMD=OFF \
+		-DYUZU_CHECK_SUBMODULES=OFF \
+		-DYUZU_USE_LLVM_DEMANGLE=OFF \
+                -DYUZU_USE_BUNDLED_SDL2=ON \
+ 		-DYUZU_USE_EXTERNAL_SDL2=OFF \
+		-DYUZU_ENABLE_LTO=ON \
+                -DENABLE_QT_TRANSLATION=ON\
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_CXX_FLAGS="$ARCH_FLAGS -Wno-error" \
+		-DCMAKE_C_FLAGS="$ARCH_FLAGS" \
+		-DCMAKE_SYSTEM_PROCESSOR="$(uname -m)" \
+		-DCMAKE_BUILD_TYPE=Release
+	ninja
+	sudo ninja install
+	echo "$VERSION" >~/version
+)
+rm -rf ./torzu
+VERSION="$(cat ~/version)"
 
 # NOW MAKE APPIMAGE
-mkdir ./AppDir
+cd ..
+mkdir -p ./AppDir
 cd ./AppDir
 
 echo '[Desktop Entry]
@@ -60,6 +79,7 @@ MimeType=application/x-nx-nro;application/x-nx-nso;application/x-nx-nsp;applicat
 Keywords=Nintendo;Switch;
 StartupWMClass=yuzu' > ./torzu.desktop
 
+# Download Icon
 if ! wget --retry-connrefused --tries=30 "$ICON" -O torzu.png; then
 	if ! wget --retry-connrefused --tries=30 "$ICON_BACKUP" -O torzu.png; then
 		echo "kek"
@@ -113,7 +133,7 @@ echo "Generating AppImage..."
 	--no-history --no-create-timestamp \
 	--compression zstd:level=22 -S23 -B16 \
 	--header uruntime \
-	-i ./AppDir -o Torzu-"$VERSION"-anylinux-"$ARCH".AppImage
+	-i ./AppDir -o Torzu-"$VERSION"-Steamdeck-"$ARCH".AppImage
 
 echo "Generating zsync file..."
 zsyncmake *.AppImage -u *.AppImage
