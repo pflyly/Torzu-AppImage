@@ -21,7 +21,7 @@ jobs:
         sed -i 's/DownloadUser/#DownloadUser/g' /etc/pacman.conf
         pacman -Syu --noconfirm base-devel strace patchelf curl wget \
           desktop-file-utils git artix-archlinux-support llvm mesa xorg-server-xvfb \
-          vulkan-radeon vulkan-intel vulkan-nouveau pulseaudio pulseaudio-alsa pipewire
+          vulkan-radeon vulkan-intel vulkan-nouveau pulseaudio pulseaudio-alsa pipewire qttools5-dev 
         pacman-key --init && pacman-key --populate archlinux
         printf "\n[extra]\nInclude = /etc/pacman.d/mirrorlist-arch\n" | tee -a /etc/pacman.conf
         sudo pacman -Syu --noconfirm \
@@ -44,7 +44,6 @@ jobs:
           qt6 \
           qt5-base \
           qt5-tools \
-          qttools5-dev \
           qt6-svg \
           qt6-declarative \
           qt5-webengine \
