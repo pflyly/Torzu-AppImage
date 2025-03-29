@@ -16,11 +16,11 @@ if [ "$1" = 'v3' ]; then
 fi
 UPINFO="gh-releases-zsync|$(echo "$GITHUB_REPOSITORY" | tr '/' '|')|latest|*$ARCH.AppImage.zsync"
 
-# BUILD TORZU
-if [ ! -d ./torzu ]; then
-	git clone https://aur.archlinux.org/torzu-git.git torzu
+# BUILD SUDACHI
+if [ ! -d ./sudachi ]; then
+	git clone https://aur.archlinux.org/sudachi.git sudachi
 fi
-cd ./torzu
+cd ./sudachi
 
 if [ "$1" = 'v3' ]; then
 	sed -i 's/-march=[^"]*/-march=x86-64-v3/' ./PKGBUILD
@@ -49,24 +49,24 @@ cd ./AppDir
 echo '[Desktop Entry]
 Version=1.0
 Type=Application
-Name=torzu
+Name=sudachi
 GenericName=Switch Emulator
 Comment=Nintendo Switch video game console emulator
-Icon=torzu
-TryExec=yuzu
-Exec=yuzu %f
+Icon=sudachi
+TryExec=sudachi
+Exec=sudachi %f
 Categories=Game;Emulator;Qt;
 MimeType=application/x-nx-nro;application/x-nx-nso;application/x-nx-nsp;application/x-nx-xci;
 Keywords=Nintendo;Switch;
-StartupWMClass=yuzu' > ./torzu.desktop
+StartupWMClass=sudachi' > ./sudachi.desktop
 
-if ! wget --retry-connrefused --tries=30 "$ICON" -O torzu.png; then
-	if ! wget --retry-connrefused --tries=30 "$ICON_BACKUP" -O torzu.png; then
+if ! wget --retry-connrefused --tries=30 "$ICON" -O sudachi.png; then
+	if ! wget --retry-connrefused --tries=30 "$ICON_BACKUP" -O sudachi.png; then
 		echo "kek"
-		touch ./torzu.png
+		touch ./sudachi.png
 	fi
 fi
-ln -s ./torzu.png ./.DirIcon
+ln -s ./sudachi.png ./.DirIcon
 
 # Bundle all libs
 wget --retry-connrefused --tries=30 "$LIB4BN" -O ./lib4bin
@@ -76,6 +76,9 @@ xvfb-run -a -- ./lib4bin -p -v -e -s -k \
 	/usr/lib/libGLX* \
 	/usr/lib/libGL.so* \
 	/usr/lib/libEGL* \
+        /usr/lib/libSDL3.so* \
+	/usr/lib/vdpau/* \
+        /usr/lib/libgamemode.so* \
 	/usr/lib/dri/* \
 	/usr/lib/libvulkan* \
 	/usr/lib/qt/plugins/audio/* \
@@ -111,7 +114,7 @@ echo "Generating AppImage..."
 ./uruntime --appimage-mkdwarfs -f \
 	--set-owner 0 --set-group 0 \
 	--no-history --no-create-timestamp \
-	--compression zstd:level=22 -S23 -B16 \
+	--compression zstd:level=22 -S26 -B32 \
 	--header uruntime \
 	-i ./AppDir -o Torzu-"$VERSION"-anylinux-"$ARCH".AppImage
 
