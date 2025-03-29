@@ -5,7 +5,7 @@ concurrency:
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "test" ]
   workflow_dispatch:
 
 jobs:
@@ -104,7 +104,7 @@ jobs:
     
   release:
       name: "release"
-      if: ${{ github.ref_name == 'main' }}
+      if: ${{ github.ref_name == 'test' }}
       needs: [build]
       permissions: write-all
       runs-on: ubuntu-latest
