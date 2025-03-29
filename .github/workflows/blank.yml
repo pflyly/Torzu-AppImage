@@ -52,6 +52,9 @@ jobs:
           sdl2 \
           sdl3 \
           qt6-base \
+          qt6-tools \
+          doxygen \
+          rapidjson \
           qt6-webengine \
           qt6-multimedia \
           qt6-wayland \
