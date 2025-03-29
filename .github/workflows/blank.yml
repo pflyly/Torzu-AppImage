@@ -51,6 +51,7 @@ jobs:
           haskell-gnutls \
           sdl2 \
           sdl3 \
+          qt6 \
           qt6-base \
           qt6-tools \
           doxygen \
