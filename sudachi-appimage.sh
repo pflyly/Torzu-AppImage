@@ -9,12 +9,10 @@ export pkgver=1.0.14
 LIB4BN="https://raw.githubusercontent.com/VHSgunzo/sharun/refs/heads/main/lib4bin"
 URUNTIME="https://github.com/VHSgunzo/uruntime/releases/latest/download/uruntime-appimage-dwarfs-$ARCH"
 SUDACHI="https://github.com/emuplace/sudachi.emuplace.app/releases/download/v${pkgver}/latest.zip"
-ICON="https://notabug.org/litucks/torzu/raw/02cfee3f184e6fdcc3b483ef399fb5d2bb1e8ec7/dist/yuzu.png"
-ICON_BACKUP="https://free-git.org/Emulator-Archive/torzu/raw/branch/master/dist/yuzu.png"
 
 if [ "$1" = 'v3' ]; then
 	echo "Making optimized build of sudachi"
-	ARCH_FLAGS="-march=znver2 -mtune=znver2 -O3 -flto=auto -w"
+	ARCH_FLAGS="-march=znver2 -mtune=znver2 -O3 -flto=auto"
 fi
 
 UPINFO="gh-releases-zsync|$(echo "$GITHUB_REPOSITORY" | tr '/' '|')|latest|*$ARCH.AppImage.zsync"
@@ -122,7 +120,7 @@ cd
 chmod +x ./appimage-builder.sh
 ./appimage-builder.sh sudachi ./sudachi/build
 rm -rf ./sudachi/build/deploy-linux/sudachi*.AppImage # Delete the generated appimage, cause it's useless now
-cp /usr/lib/libSDL3.so* /home/deck/Citron/build/deploy-linux/AppDir/usr/lib/ # Copying libsdl3 to the already done appdir
+cp /usr/lib/libSDL3.so* ./sudachi/build/deploy-linux/AppDir/usr/lib/ # Copying libsdl3 to the already done appdir
 
 # turn appdir into appimage
 wget -q "$URUNTIME" -O ./uruntime
@@ -141,7 +139,7 @@ echo "Generating AppImage..."
 	--no-history --no-create-timestamp \
 	--compression zstd:level=22 -S26 -B32 \
 	--header uruntime \
-	-i ./AppDir -o Torzu-"$VERSION"-anylinux-"$ARCH".AppImage
+	-i ./sudachi/build/deploy-linux/AppDir -o sudachi-"$VERSION"-steamdeck-"$ARCH".AppImage
 
 echo "Generating zsync file..."
 zsyncmake *.AppImage -u *.AppImage
