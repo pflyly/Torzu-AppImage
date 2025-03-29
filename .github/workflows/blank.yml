@@ -4,7 +4,6 @@ concurrency:
   cancel-in-progress: true
 
 on:
-   push:
    workflow_dispatch:
 
 jobs:
@@ -28,6 +27,7 @@ jobs:
           catch2 \
           enet \
           gamemode \
+          hicolor-icon-theme \
           cmake \
           gcc13 \
           glslang \
@@ -73,41 +73,17 @@ jobs:
           boost \
           clang \
           vulkan-headers \
-          ffmpeg4.4 \
           zip \
           unzip \
           boost-libs \
+          brotli \
           qt5ct
-
-    - name: Install vasm
-      run: |
-        echo "Making vasm dependency"
-
-        sudo sed -i 's|EUID == 0|EUID == 69|g' /usr/bin/makepkg
-        mkdir -p /usr/local/bin
-        cp /usr/bin/makepkg /usr/local/bin
-        
-        sudo sed -i 's|-O2|-O3|; s|MAKEFLAGS=.*|MAKEFLAGS="-j$(nproc)"|; s|#MAKEFLAGS|MAKEFLAGS|' /etc/makepkg.conf
-        cat /etc/makepkg.conf
-
-        git clone https://aur.archlinux.org/vasm vasm
-        ( cd vasm
-          makepkg
-          ls .
-          sudo pacman --noconfirm -U *.pkg.tar.*
-        )
 
     - name: Install debloated llvm-libs
       run: |
         LLVM="https://github.com/pkgforge-dev/llvm-libs-debloated/releases/download/continuous/llvm-libs-nano-x86_64.pkg.tar.zst"
         wget "$LLVM" -O ./llvm-libs.pkg.tar.zst
         pacman -U --noconfirm ./llvm-libs.pkg.tar.zst
-
-    - name: Compile sudachi
-      run: |
-        chmod +x ./*-appimage.sh && ./*-appimage.sh
-        mkdir -p dist
-        mv *.AppImage* dist/
 
     - name: Compile sudachi Optimized
       run: |
