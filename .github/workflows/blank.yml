@@ -4,9 +4,8 @@ concurrency:
   cancel-in-progress: true
 
 on:
-  schedule:
-    - cron: "0 14 * * 0"
-  workflow_dispatch:
+   push:
+   workflow_dispatch:
 
 jobs:
   build:
@@ -51,6 +50,11 @@ jobs:
           libass \
           haskell-gnutls \
           sdl2 \
+          sdl3 \
+          qt6-base \
+          qt6-webengine \
+          qt6-multimedia \
+          qt6-wayland \
           libva \
           meson \
           ninja \
@@ -96,13 +100,13 @@ jobs:
         wget "$LLVM" -O ./llvm-libs.pkg.tar.zst
         pacman -U --noconfirm ./llvm-libs.pkg.tar.zst
 
-    - name: Compile Torzu
+    - name: Compile sudachi
       run: |
         chmod +x ./*-appimage.sh && ./*-appimage.sh
         mkdir -p dist
         mv *.AppImage* dist/
 
-    - name: Compile Torzu Optimized
+    - name: Compile sudachi Optimized
       run: |
         rm -rf ./AppDir
         sudo pacman -R --noconfirm torzu-git
@@ -156,31 +160,12 @@ jobs:
         - name: Continuous Releaser
           uses: softprops/action-gh-release@v2
           with:
-            name: "Torzu AppImage ${{ env.APP_VERSION }}"
+            name: "sudachi AppImage ${{ env.APP_VERSION }}"
             tag_name: "${{ env.APP_VERSION }}"
             prerelease: false
             draft: false
             generate_release_notes: false
             make_latest: true
-            files: |
-              *.AppImage*
-          continue-on-error: false
-
-        #Snapshot Release
-        - name: Get Date
-          run: |
-            SNAPSHOT_TAG="$(date --utc +'%Y%m%d-%H%M%S')"
-            echo SNAPSHOT_TAG="${SNAPSHOT_TAG}" >> "${GITHUB_ENV}"
-          continue-on-error: false
-        - name: Snapshot Releaser
-          uses: softprops/action-gh-release@v2
-          with:
-            name: "Snapshot ${{ env.APP_VERSION }}"
-            tag_name: "${{ env.SNAPSHOT_TAG }}"
-            prerelease: false
-            draft: false
-            generate_release_notes: false
-            make_latest: false
             files: |
               *.AppImage*
           continue-on-error: false
