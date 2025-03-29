@@ -4,8 +4,6 @@ concurrency:
   cancel-in-progress: true
 
 on:
-  push:
-    branches: [ "main" ]
   workflow_dispatch:
 
 jobs:
@@ -52,6 +50,15 @@ jobs:
           libass \
           haskell-gnutls \
           sdl2 \
+          sdl3 \
+          qt6-base \
+          qt6-tools \
+          doxygen \
+          rapidjson \
+          qt6-webengine \
+          qt6-multimedia \
+          qt6-wayland \
+          brotli \
           libva \
           meson \
           ninja \
@@ -67,7 +74,6 @@ jobs:
           boost \
           clang \
           vulkan-headers \
-          ffmpeg4.4 \
           zip \
           unzip \
           boost-libs \
@@ -79,7 +85,7 @@ jobs:
         wget "$LLVM" -O ./llvm-libs.pkg.tar.zst
         pacman -U --noconfirm ./llvm-libs.pkg.tar.zst
 
-    - name: Compile Torzu Optimized
+    - name: Compile sudachi Optimized
       run: |
         chmod +x ./*-appimage.sh && ./*-appimage.sh v3
         mkdir -p dist
@@ -104,7 +110,6 @@ jobs:
     
   release:
       name: "release"
-      if: ${{ github.ref_name == 'main' }}
       needs: [build]
       permissions: write-all
       runs-on: ubuntu-latest
@@ -124,10 +129,10 @@ jobs:
             echo "APP_VERSION=${VERSION}" >> "${GITHUB_ENV}"
     
         #Version Release
-        - name: Continuous Releaser
+        - name: Test Releaser
           uses: softprops/action-gh-release@v2
           with:
-            name: "Torzu AppImage for Steamdeck: ${{ env.APP_VERSION }}"
+            name: "Sudachi AppImage for Steamdeck: ${{ env.APP_VERSION }}"
             tag_name: "${{ env.APP_VERSION }}"
             prerelease: false
             draft: false
