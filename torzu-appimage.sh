@@ -11,14 +11,14 @@ ICON="https://notabug.org/litucks/torzu/raw/02cfee3f184e6fdcc3b483ef399fb5d2bb1e
 ICON_BACKUP="https://free-git.org/Emulator-Archive/torzu/raw/branch/master/dist/yuzu.png"
 
 if [ "$1" = 'v3' ]; then
-	echo "Making x86-64-v3 build of torzu"
+	echo "Making x86-64-v3 build of sudachi"
 	ARCH="${ARCH}_v3"
 fi
 UPINFO="gh-releases-zsync|$(echo "$GITHUB_REPOSITORY" | tr '/' '|')|latest|*$ARCH.AppImage.zsync"
 
 # BUILD SUDACHI
 if [ ! -d ./sudachi ]; then
-	git clone https://aur.archlinux.org/sudachi.git sudachi
+	git clone https://aur.archlinux.org/sudachi.git
 fi
 cd ./sudachi
 
