@@ -59,7 +59,7 @@ echo "$VERSION" >~/version
 # NOW MAKE APPIMAGE, use AppImage-build.sh to generate target dir
 cd ..
 chmod +x ./AppImage-build.sh
-./appimage-builder.sh
+./AppImage-build.sh
 rm -rf ./torzu*.AppImage # Delete the generated appimage, cause it's useless now
 cp /usr/lib/libSDL3.so* ./AppImageBuilder/build/ # Copying libsdl3 to the already done appdir
 
