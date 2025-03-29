@@ -2,20 +2,21 @@
 
 This repository makes builds with several flags of optimization especially for **Steamdeck**.
 
-Another **PGO** optimization Build will be built locally via Torzu_PGO_maker.sh script(which can be found in this repo) on a Steamdeck Oled and add to the relase page manually.
+The **PGO** optimization Build is built locally via Torzu_PGO_maker.sh script(which can be found in this repo) on a Steamdeck Oled, cmake code is from [citron](https://git.citron-emu.org/Citron/Citron/commit/d869045b77fc31f8555b04590b8982c4196bbd83) .
 
-Due the complexity of PGO two phase building, it can't be built automatically through CI for now.
+Due to the complexity of PGO two phase building, it can't be built automatically through CI for now.
 
 
-* [Latest Normal Release](https://github.com/pflyly/Torzu-AppImage/releases/tag/Normal_Build)
-* [Latest PGO_Optimized Release](https://github.com/pflyly/Torzu-AppImage/releases/latest)
+* [Latest Normal Release](https://github.com/pflyly/Torzu-AppImage/releases)
+* [Latest PGO_Optimized Release](https://github.com/pflyly/Torzu-AppImage/releases/tag/PGO_Optimized)
 
 
 ---------------------------------------------------------------
 
-AppImage made using [sharun](https://github.com/VHSgunzo/sharun), which makes it extremely easy to turn any binary into a portable package without using containers or similar tricks.
+Is this fork, AppImage made using torzu official AppImage-build.sh directly instead of upstream using [sharun](https://github.com/VHSgunzo/sharun).
 
-**This AppImage bundles everything and should work on any linux distro, even on musl based ones.**
+**This AppImage aim only for Steamdeck, so we don't need to bundle every lib, which can keep the final appimage as small as possible.**
+
 
 **It also uses the [uruntime](https://github.com/VHSgunzo/uruntime) which makes use of dwarfs, resulting in a smaller and faster AppImage.**
 
