@@ -72,25 +72,7 @@ jobs:
           unzip \
           boost-libs \
           qt5ct
-
-    - name: Install vasm
-      run: |
-        echo "Making vasm dependency"
-
-        sudo sed -i 's|EUID == 0|EUID == 69|g' /usr/bin/makepkg
-        mkdir -p /usr/local/bin
-        cp /usr/bin/makepkg /usr/local/bin
-        
-        sudo sed -i 's|-O2|-O3|; s|MAKEFLAGS=.*|MAKEFLAGS="-j$(nproc)"|; s|#MAKEFLAGS|MAKEFLAGS|' /etc/makepkg.conf
-        cat /etc/makepkg.conf
-
-        git clone https://aur.archlinux.org/vasm vasm
-        ( cd vasm
-          makepkg
-          ls .
-          sudo pacman --noconfirm -U *.pkg.tar.*
-        )
-
+   
     - name: Install debloated llvm-libs
       run: |
         LLVM="https://github.com/pkgforge-dev/llvm-libs-debloated/releases/download/continuous/llvm-libs-nano-x86_64.pkg.tar.zst"
@@ -99,7 +81,6 @@ jobs:
 
     - name: Compile Torzu Optimized
       run: |
-        rm -rf ./AppDir
         chmod +x ./*-appimage.sh && ./*-appimage.sh v3
         mkdir -p dist
         mv *.AppImage* dist/

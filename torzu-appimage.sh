@@ -26,94 +26,44 @@ if [ ! -d ./torzu ]; then
 fi
 
 # Build Torzu
-(
-	cd ./torzu
-      	COMM_HASH="$(git rev-parse --short HEAD)"
-	VERSION="${COMM_HASH}"
-	git submodule update --init --recursive -j$(nproc)
-        #Replaces 'boost::asio::io_service' with 'boost::asio::io_context' for compatibility with Boost.ASIO versions 1.74.0 and later
-	find src -type f -name '*.cpp' -exec sed -i 's/boost::asio::io_service/boost::asio::io_context/g' {} \;
+
+cd ./torzu
+COMM_HASH="$(git rev-parse --short HEAD)"
+VERSION="${COMM_HASH}"
+git submodule update --init --recursive -j$(nproc)
+#Replaces 'boost::asio::io_service' with 'boost::asio::io_context' for compatibility with Boost.ASIO versions 1.74.0 and later
+find src -type f -name '*.cpp' -exec sed -i 's/boost::asio::io_service/boost::asio::io_context/g' {} \;
 	
-        mkdir build
-	cd build
-	cmake .. -GNinja \
-		-DYUZU_USE_BUNDLED_VCPKG=OFF \
-		-DYUZU_USE_BUNDLED_QT=OFF \
-		-DYUZU_USE_BUNDLED_FFMPEG=OFF \
-		-DYUZU_TESTS=OFF \
-                -DYUZU_CMD=OFF \
-		-DYUZU_CHECK_SUBMODULES=OFF \
-		-DYUZU_USE_LLVM_DEMANGLE=OFF \
-                -DYUZU_USE_BUNDLED_SDL2=ON \
- 		-DYUZU_USE_EXTERNAL_SDL2=OFF \
-		-DYUZU_ENABLE_LTO=ON \
-		-DCMAKE_INSTALL_PREFIX=/usr \
-		-DCMAKE_CXX_FLAGS="$ARCH_FLAGS -Wno-error" \
-		-DCMAKE_C_FLAGS="$ARCH_FLAGS" \
-		-DCMAKE_SYSTEM_PROCESSOR="$(uname -m)" \
-		-DCMAKE_BUILD_TYPE=Release
-	ninja
-	sudo ninja install
-	echo "$VERSION" >~/version
-)
-rm -rf ./torzu
-VERSION="$(cat ~/version)"
+mkdir build
+cd build
+cmake .. -GNinja \
+	 -DYUZU_USE_BUNDLED_VCPKG=OFF \
+	 -DYUZU_USE_BUNDLED_QT=OFF \
+	 -DYUZU_USE_BUNDLED_FFMPEG=OFF \
+	 -DYUZU_TESTS=OFF \
+         -DYUZU_CMD=OFF \
+	 -DYUZU_CHECK_SUBMODULES=OFF \
+	 -DYUZU_USE_LLVM_DEMANGLE=OFF \
+         -DYUZU_USE_BUNDLED_SDL2=ON \
+ 	 -DYUZU_USE_EXTERNAL_SDL2=OFF \
+	 -DYUZU_ENABLE_LTO=ON \
+	 -DCMAKE_INSTALL_PREFIX=/usr \
+	 -DCMAKE_CXX_FLAGS="$ARCH_FLAGS -Wno-error" \
+	 -DCMAKE_C_FLAGS="$ARCH_FLAGS" \
+	 -DCMAKE_SYSTEM_PROCESSOR="$(uname -m)" \
+	 -DCMAKE_BUILD_TYPE=Release
+ninja
+sudo ninja install
+echo "$VERSION" >~/version
 
-# NOW MAKE APPIMAGE
-mkdir ./AppDir
-cd ./AppDir
+# NOW MAKE APPIMAGE, use AppImage-build.sh to generate target dir
+cd ..
+chmod +x ./AppImage-build.sh
+./AppImage-build.sh
+rm -rf ./torzu*.AppImage # Delete the generated appimage, cause it's useless now
+cp /usr/lib/libSDL3.so* ./AppImageBuilder/build/ # Copying libsdl3 to the already done appdir
 
-echo '[Desktop Entry]
-Version=1.0
-Type=Application
-Name=torzu
-GenericName=Switch Emulator
-Comment=Nintendo Switch video game console emulator
-Icon=torzu
-TryExec=yuzu
-Exec=yuzu %f
-Categories=Game;Emulator;Qt;
-MimeType=application/x-nx-nro;application/x-nx-nso;application/x-nx-nsp;application/x-nx-xci;
-Keywords=Nintendo;Switch;
-StartupWMClass=yuzu' > ./torzu.desktop
-
-# Download Icon
-if ! wget --retry-connrefused --tries=30 "$ICON" -O torzu.png; then
-	if ! wget --retry-connrefused --tries=30 "$ICON_BACKUP" -O torzu.png; then
-		echo "kek"
-		touch ./torzu.png
-	fi
-fi
-ln -s ./torzu.png ./.DirIcon
-
-# Bundle all libs
-wget --retry-connrefused --tries=30 "$LIB4BN" -O ./lib4bin
-chmod +x ./lib4bin
-xvfb-run -a -- ./lib4bin -p -v -e -s -k \
-	/usr/bin/yuzu* \
-	/usr/lib/libGLX* \
-	/usr/lib/libGL.so* \
-	/usr/lib/libEGL* \
-	/usr/lib/dri/* \
-	/usr/lib/libvulkan* \
-	/usr/lib/qt/plugins/audio/* \
-	/usr/lib/qt/plugins/bearer/* \
-	/usr/lib/qt/plugins/imageformats/* \
-	/usr/lib/qt/plugins/iconengines/* \
-	/usr/lib/qt/plugins/platforms/* \
-	/usr/lib/qt/plugins/platformthemes/* \
-	/usr/lib/qt/plugins/platforminputcontexts/* \
-	/usr/lib/qt/plugins/styles/* \
-	/usr/lib/qt/plugins/xcbglintegrations/* \
-	/usr/lib/qt/plugins/wayland-*/* \
-	/usr/lib/pulseaudio/* \
-	/usr/lib/alsa-lib/*
-
-# Prepare sharun
-ln ./sharun ./AppRun
-./sharun -g
-
-# turn appdir into appimage
+# turn build dir into appimage
 cd ..
 wget -q "$URUNTIME" -O ./uruntime
 chmod +x ./uruntime
@@ -131,7 +81,7 @@ echo "Generating AppImage..."
 	--no-history --no-create-timestamp \
 	--compression zstd:level=22 -S23 -B16 \
 	--header uruntime \
-	-i ./AppDir -o Torzu-"$VERSION"-Steamdeck-"$ARCH".AppImage
+	-i ./torzu/AppImageBuilder/build -o Torzu-"$VERSION"-Steamdeck-"$ARCH".AppImage
 
 echo "Generating zsync file..."
 zsyncmake *.AppImage -u *.AppImage
