@@ -18,7 +18,7 @@ UPINFO="gh-releases-zsync|$(echo "$GITHUB_REPOSITORY" | tr '/' '|')|latest|*$ARC
 
 # BUILD SUDACHI
 if [ ! -d ./sudachi ]; then
-	git clone https://aur.archlinux.org/sudachi.git
+	git clone https://aur.archlinux.org/sudachi.git sudachi
 fi
 cd ./sudachi
 
