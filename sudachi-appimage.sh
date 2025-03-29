@@ -84,9 +84,7 @@ git submodule add https://github.com/mozilla/cubeb externals/cubeb
 git submodule add https://github.com/libsdl-org/sdl externals/SDL3
 
 git submodule update --init --recursive
-cd externals/cpp-httplib && git checkout 65ce51aed7f15e40e8fb6d2c0a8efb10bcb40126
-cd ..
-cd ..
+git checkout 65ce51aed7f15e40e8fb6d2c0a8efb10bcb40126
 
 #Replaces 'boost::asio::io_service' with 'boost::asio::io_context' for compatibility with Boost.ASIO versions 1.74.0 and later
 find src -type f -name '*.cpp' -exec sed -i 's/boost::asio::io_service/boost::asio::io_context/g' {} \;
