@@ -29,7 +29,6 @@ if [ "$1" = 'v3' ]; then
 else
 	sed -i 's/-march=[^"]*/-march=x86-64/' ./PKGBUILD
 fi
-sed -i 's/-DYUZU_USE_EXTERNAL_VULKAN_SPIRV_TOOLS=OFF/-DYUZU_USE_EXTERNAL_VULKAN_SPIRV_TOOLS=ON/' ./PKGBUILD
 if ! grep -q -- '-O3' ./PKGBUILD; then
 	sed -i 's/-march=/-O3 -march=/' ./PKGBUILD
 fi
@@ -72,7 +71,7 @@ ln -s ./sudachi.png ./.DirIcon
 wget --retry-connrefused --tries=30 "$LIB4BN" -O ./lib4bin
 chmod +x ./lib4bin
 xvfb-run -a -- ./lib4bin -p -v -e -s -k \
-	/usr/bin/yuzu* \
+	/usr/bin/sudachi* \
 	/usr/lib/libGLX* \
 	/usr/lib/libGL.so* \
 	/usr/lib/libEGL* \
