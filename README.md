@@ -2,11 +2,11 @@
 
 This repository makes builds with several flags of optimization especially for **Steamdeck**.
 
-* [Latest Normal Release](https://github.com/pflyly/Torzu-AppImage/releases)
+* [Latest Release](https://github.com/pflyly/Torzu-AppImage/releases/latest)
 
 ---------------------------------------------------------------
 
-Is this fork, AppImage made using torzu official AppImage-build.sh directly instead of upstream using [sharun](https://github.com/VHSgunzo/sharun).
+In this fork, AppImage made using torzu official AppImage-build.sh directly instead of upstream using [sharun](https://github.com/VHSgunzo/sharun).
 
 **This AppImage aim only for Steamdeck, so we don't need to bundle every lib, which can keep the final appimage as small as possible.**
 
