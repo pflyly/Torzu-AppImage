@@ -2,14 +2,7 @@
 
 This repository makes builds with several flags of optimization especially for **Steamdeck**.
 
-The **PGO** optimization Build is built locally via Torzu_PGO_maker.sh script(which can be found in this repo) on a Steamdeck Oled, cmake code is from [citron](https://git.citron-emu.org/Citron/Citron/commit/d869045b77fc31f8555b04590b8982c4196bbd83) .
-
-Due to the complexity of PGO two phase building, it can't be built automatically through CI for now.
-
-
 * [Latest Normal Release](https://github.com/pflyly/Torzu-AppImage/releases)
-* [Latest PGO_Optimized Release](https://github.com/pflyly/Torzu-AppImage/releases/tag/PGO_Optimized)
-
 
 ---------------------------------------------------------------
 
