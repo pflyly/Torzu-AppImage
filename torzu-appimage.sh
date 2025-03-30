@@ -11,8 +11,7 @@ ICON="https://notabug.org/litucks/torzu/raw/02cfee3f184e6fdcc3b483ef399fb5d2bb1e
 ICON_BACKUP="https://free-git.org/Emulator-Archive/torzu/raw/branch/master/dist/yuzu.png"
 
 if [ "$1" = 'v3' ]; then
-	echo "Making x86-64-v3 build of sudachi"
-	ARCH="${ARCH}_v3"
+	echo "Making optimized build of sudachi"
 fi
 UPINFO="gh-releases-zsync|$(echo "$GITHUB_REPOSITORY" | tr '/' '|')|latest|*$ARCH.AppImage.zsync"
 
@@ -23,8 +22,9 @@ fi
 cd ./sudachi
 
 if [ "$1" = 'v3' ]; then
-	sed -i 's/-march=[^"]*/-march=x86-64-v3/' ./PKGBUILD
-	sudo sed -i 's/-march=x86-64 /-march=x86-64-v3 /' /etc/makepkg.conf # Do I need to do this as well?
+	sed -i 's/-march=[^"]*/-march=znver2/' ./PKGBUILD
+ 	sed -i 's/-mtune=[^"]*/-mtune=znver2/' ./PKGBUILD
+	sudo sed -i 's/-march=x86-64 /-march=znver2 /' /etc/makepkg.conf # Do I need to do this as well?
 	cat /etc/makepkg.conf
 else
 	sed -i 's/-march=[^"]*/-march=x86-64/' ./PKGBUILD
