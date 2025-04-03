@@ -85,7 +85,6 @@ git submodule add https://github.com/libsdl-org/sdl externals/SDL3
 
 git submodule update --init --recursive
 
-VERSION=65ce51aed
 mkdir build
 cd build
 cmake .. -GNinja \
@@ -106,6 +105,7 @@ cmake .. -GNinja \
 	 -DCMAKE_BUILD_TYPE=Release
 ninja
 sudo ninja install
+VERSION="$pkgver"
 echo "$VERSION" >~/version
 
 # NOW MAKE APPIMAGE, use appimage-builder.sh to generate target dir
