@@ -4,7 +4,7 @@ set -e
 
 export APPIMAGE_EXTRACT_AND_RUN=1
 export ARCH="$(uname -m)"
-export pkgver=1.0.15
+export pkgver=1.0.14
 
 LIB4BN="https://raw.githubusercontent.com/VHSgunzo/sharun/refs/heads/main/lib4bin"
 URUNTIME="https://github.com/VHSgunzo/uruntime/releases/latest/download/uruntime-appimage-dwarfs-$ARCH"
@@ -84,9 +84,6 @@ git submodule add https://github.com/mozilla/cubeb externals/cubeb
 git submodule add https://github.com/libsdl-org/sdl externals/SDL3
 
 git submodule update --init --recursive
-cd externals/cpp-httplib && git checkout 65ce51aed7f15e40e8fb6d2c0a8efb10bcb40126
-cd ..
-cd ..
 
 VERSION=65ce51aed
 mkdir build
