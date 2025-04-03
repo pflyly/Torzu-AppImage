@@ -85,6 +85,10 @@ git submodule add https://github.com/libsdl-org/sdl externals/SDL3
 
 git submodule update --init --recursive
 
+cd externals/cpp-httplib && git checkout 65ce51aed7f15e40e8fb6d2c0a8efb10bcb40126
+cd ..
+cd ..
+ 
 mkdir build
 cd build
 cmake .. -GNinja \
