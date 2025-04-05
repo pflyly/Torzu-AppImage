@@ -24,7 +24,7 @@ cd ./sudachi
 if [ "$1" = 'v3' ]; then
 	sed -i 's/-march=[^"]*/-march=znver2/' ./PKGBUILD
  	sed -i 's/-mtune=[^"]*/-mtune=znver2/' ./PKGBUILD
-  	sed -i 's/-Wno-unused-variable/-Wno-unused-variable -w/' ./PKGBUILD
+  	sed -i 's/-Wno-unused-variable/-Wno-unused-variable -Wno-interference-size/' ./PKGBUILD
 	sudo sed -i 's/-march=x86-64 /-march=znver2 /' /etc/makepkg.conf # Do I need to do this as well?
 	cat /etc/makepkg.conf
 else
