@@ -4,6 +4,7 @@ set -e
 
 export APPIMAGE_EXTRACT_AND_RUN=1
 export ARCH="$(uname -m)"
+export HOME=$(realpath "./")
 export pkgver=1.0.15
 
 LIB4BN="https://raw.githubusercontent.com/VHSgunzo/sharun/refs/heads/main/lib4bin"
@@ -22,7 +23,7 @@ if [ ! -d ./sudachi ]; then
 	wget -q "$SUDACHI"
 	mkdir ./sudachi
 	unzip latest.zip -d ./sudachi
- 	cp -f ./CMakeLists.txt ./sudachi/src/sudachi_cmd/
+ 	cp -f ./CMakeLists.txt ./sudachi/src/sudachi_cmd/ #disable non-needed CMD file
 fi
 
 cd ./sudachi
@@ -87,9 +88,8 @@ git submodule add https://github.com/libsdl-org/sdl externals/SDL3
 git submodule update --init --recursive
 
 cd externals/cpp-httplib && git checkout 65ce51aed7f15e40e8fb6d2c0a8efb10bcb40126
-cd ..
-cd ..
- 
+
+cd "${HOME}"/sudachi
 mkdir build
 cd build
 cmake .. -GNinja \
@@ -114,12 +114,10 @@ VERSION="$pkgver"
 echo "$VERSION" >~/version
 
 # NOW MAKE APPIMAGE, use appimage-builder.sh to generate target dir
-cd ..
-cd ..
+cd "${HOME}"
 chmod +x ./appimage-builder.sh
 ./appimage-builder.sh sudachi ./sudachi/build
 rm -rf ./sudachi/build/deploy-linux/sudachi*.AppImage # Delete the generated appimage, cause it's useless now
-cp /usr/lib/libSDL3.so* ./sudachi/build/deploy-linux/AppDir/usr/lib/ # Copying libsdl3 to the already done appdir
 
 # turn appdir into appimage
 wget -q "$URUNTIME" -O ./uruntime
