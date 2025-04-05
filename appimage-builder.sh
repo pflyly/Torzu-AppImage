@@ -68,7 +68,7 @@ export QMAKE="/usr/bin/qmake6"
 export QT_SELECT=6
 
 # remove NO_STRIP=1 if linuxdeploy is updated, see: https://github.com/linuxdeploy/linuxdeploy/issues/272
-NO_STRIP=1 APPIMAGE_EXTRACT_AND_RUN=1 ./linuxdeploy --appdir ./AppDir --plugin qt --plugin checkrt
+NO_STRIP=1 APPIMAGE_EXTRACT_AND_RUN=1 ./linuxdeploy --appdir ./AppDir --plugin qt
 
 # remove libwayland-client because it has platform-dependent exports and breaks other OSes
 rm -fv ./AppDir/usr/lib/libwayland-client.so*
@@ -81,26 +81,3 @@ rm -rf ./linuxdeploy-squashfs-root
 mv -v ./squashfs-root/ ./linuxdeploy-squashfs-root/
 
 ./linuxdeploy-squashfs-root/plugins/linuxdeploy-plugin-appimage/usr/bin/appimagetool ./AppDir -g
-
-#APPIMAGE_SUFFIX="linux_${CPU_ARCH}"
-APPIMAGE_SUFFIX="${CPU_ARCH}"
-#COMM_TAG="${DISPLAYVERSION}"
-COMM_COUNT="$(git rev-list --count HEAD)"
-COMM_HASH="$(git rev-parse --short=9 HEAD)"
-BUILD_DATE=$(date +"%Y%m%d")
-#APPIMAGE_NAME="${BUILD_APP}-v${COMM_TAG}-${BUILD_DATE}-${COMM_COUNT}-${COMM_HASH}-${APPIMAGE_SUFFIX}.AppImage"
-APPIMAGE_NAME="${BUILD_APP}-nightly-${BUILD_DATE}-${COMM_COUNT}-${COMM_HASH}-${APPIMAGE_SUFFIX}.AppImage"
-
-LATEST_APPIMAGE=$(ls -1t ${BUILD_APP}*.AppImage | head -n 1) # find the most recent AppImage
-if [[ -z "${LATEST_APPIMAGE}" ]]; then
-    >&2 echo "Error: No AppImage found for ${BUILD_APP}"
-    exit 1
-fi
-
-mv -v "${LATEST_APPIMAGE}" "${APPIMAGE_NAME}"
-
-FILESIZE=$(stat -c %s "./${APPIMAGE_NAME}")
-SHA256SUM=$(sha256sum "./${APPIMAGE_NAME}" | awk '{ print $1 }')
-
-echo "${APPIMAGE_NAME}"
-echo "${SHA256SUM};${FILESIZE}B"
