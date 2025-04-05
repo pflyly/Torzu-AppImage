@@ -22,6 +22,7 @@ if [ ! -d ./sudachi ]; then
 	wget -q "$SUDACHI"
 	mkdir ./sudachi
 	unzip latest.zip -d ./sudachi
+ 	cp -f ./CMakeLists.txt ./sudachi/src/sudachi_cmd/
 fi
 
 cd ./sudachi
