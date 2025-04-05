@@ -46,14 +46,8 @@ cd "${BUILD_DIR}"
 
 # deploy/install to deploy-linux/AppDir
 DESTDIR="${DEPLOY_LINUX_APPDIR_FOLDER}" ninja install
-sudo mv -f "${DEPLOY_LINUX_FOLDER}"/AppDir/usr/local/bin "${DEPLOY_LINUX_FOLDER}"/AppDir/usr/
-sudo mv -f "${DEPLOY_LINUX_FOLDER}"/AppDir/usr/local/share "${DEPLOY_LINUX_FOLDER}"/AppDir/usr/
-sudo rm -rf "${DEPLOY_LINUX_FOLDER}"/AppDir/usr/local
 
 cd "${DEPLOY_LINUX_FOLDER}"
-
-# remove -cmd executable, not needed for AppImage
-rm -fv "${DEPLOY_LINUX_APPDIR_FOLDER}"/usr/bin/"${BUILD_APP//torzu/yuzu}"-cmd
 
 curl -fsSLo ./linuxdeploy "https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-${CPU_ARCH}.AppImage"
 chmod +x ./linuxdeploy
