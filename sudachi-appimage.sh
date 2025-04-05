@@ -115,7 +115,8 @@ VERSION="$pkgver"
 echo "$VERSION" >~/version
 
 # NOW MAKE APPIMAGE, use appimage-builder.sh to generate target dir
-cd
+cd ..
+cd ..
 chmod +x ./appimage-builder.sh
 ./appimage-builder.sh sudachi ./sudachi/build
 rm -rf ./sudachi/build/deploy-linux/sudachi*.AppImage # Delete the generated appimage, cause it's useless now
