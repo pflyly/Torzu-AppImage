@@ -25,8 +25,10 @@ fi
 # Build Torzu
 
 cd ./torzu
-COMM_HASH="$(git rev-parse --short HEAD)"
-VERSION="${COMM_HASH}"
+COUNT="$(git rev-list --count HEAD)"
+HASH="$(git rev-parse --short HEAD)"
+DATE="$(date +"%Y%m%d")"
+VERSION="${HASH}"
 git submodule update --init --recursive -j$(nproc)
 #Replaces 'boost::asio::io_service' with 'boost::asio::io_context' for compatibility with Boost.ASIO versions 1.74.0 and later
 find src -type f -name '*.cpp' -exec sed -i 's/boost::asio::io_service/boost::asio::io_context/g' {} \;
@@ -66,6 +68,9 @@ cd ..
 wget -q "$URUNTIME" -O ./uruntime
 chmod +x ./uruntime
 
+# Keep the mount point (speeds up launch time)
+sed -i 's|URUNTIME_MOUNT=[0-9]|URUNTIME_MOUNT=0|' ./uruntime
+
 #Add udpate info to runtime
 echo "Adding update information \"$UPINFO\" to runtime..."
 printf "$UPINFO" > data.upd_info
@@ -79,7 +84,7 @@ echo "Generating AppImage..."
 	--no-history --no-create-timestamp \
 	--compression zstd:level=22 -S23 -B16 \
 	--header uruntime \
-	-i ./torzu/AppImageBuilder/build -o Torzu-"$VERSION"-Steamdeck-"$ARCH".AppImage
+	-i ./torzu/AppImageBuilder/build -o Torzu-"${DATE}"-"${COUNT}"-"${HASH}"-Steamdeck.AppImage
 
 echo "Generating zsync file..."
 zsyncmake *.AppImage -u *.AppImage
