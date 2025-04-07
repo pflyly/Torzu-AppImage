@@ -5,10 +5,7 @@ set -e
 export APPIMAGE_EXTRACT_AND_RUN=1
 export ARCH="$(uname -m)"
 LIB4BN="https://raw.githubusercontent.com/VHSgunzo/sharun/refs/heads/main/lib4bin"
-URUNTIME=$(wget -q https://api.github.com/repos/VHSgunzo/uruntime/releases -O - \
-	| sed 's/[()",{} ]/\n/g' | grep -oi "https.*appimage.*dwarfs.*$ARCH$" | head -1)
-ICON="https://notabug.org/litucks/torzu/raw/02cfee3f184e6fdcc3b483ef399fb5d2bb1e8ec7/dist/yuzu.png"
-ICON_BACKUP="https://free-git.org/Emulator-Archive/torzu/raw/branch/master/dist/yuzu.png"
+URUNTIME="https://github.com/VHSgunzo/uruntime/releases/latest/download/uruntime-appimage-dwarfs-$ARCH"
 
 # Check for optimized build flag
 if [ "$1" = 'v3' ]; then
@@ -56,10 +53,10 @@ ninja
 sudo ninja install
 echo "$VERSION" >~/version
 
-# NOW MAKE APPIMAGE, use AppImage-build.sh to generate target dir
+# NOW MAKE APPIMAGE, use AppImage-build-local.sh to generate target dir
 cd ..
-chmod +x ./AppImage-build.sh
-./AppImage-build.sh
+chmod +x ./AppImage-build-local.sh
+./AppImage-build-local.sh
 rm -rf ./torzu*.AppImage # Delete the generated appimage, cause it's useless now
 cp /usr/lib/libSDL3.so* ./AppImageBuilder/build/ # Copying libsdl3 to the already done appdir
 
