@@ -89,8 +89,8 @@ jobs:
 
     - name: Check version file
       run: |
-       cat ~/version
-       echo "APP_VERSION=$(cat ~/version)" >> "${GITHUB_ENV}"
+       cat ${HOME}/version
+       echo "APP_VERSION=$(cat ${HOME}/version)" >> "${GITHUB_ENV}"
     
     - name: Upload artifact
       uses: actions/upload-artifact@v4.6.1
@@ -102,7 +102,7 @@ jobs:
       uses: actions/upload-artifact@v4.6.1
       with:
        name: version
-       path: ~/version
+       path: ${HOME}/version
     
   release:
       name: "release"
