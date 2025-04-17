@@ -1,4 +1,4 @@
-name: Appimage
+name: Build Torzu
 concurrency:
   group: build-${{ github.ref }}
   cancel-in-progress: true
@@ -9,7 +9,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  torzu_build:
+    name: Torzu AppImage
     runs-on: ubuntu-22.04
     container: artixlinux/artixlinux:latest
     steps:
@@ -81,7 +82,7 @@ jobs:
 
     - name: Compile Torzu Optimized
       run: |
-        chmod +x ./*-appimage.sh && ./*-appimage.sh v3
+        chmod +x ./torzu-appimage.sh && ./torzu-appimage.sh
         mkdir -p dist
         mv *.AppImage* dist/
 
@@ -105,7 +106,7 @@ jobs:
   release:
       name: "release"
       if: ${{ github.ref_name == 'main' }}
-      needs: [build]
+      needs: [torzu_build]
       permissions: write-all
       runs-on: ubuntu-latest
 
@@ -128,7 +129,7 @@ jobs:
           uses: softprops/action-gh-release@v2
           with:
             name: "Torzu AppImage for Steamdeck: ${{ env.APP_VERSION }}"
-            tag_name: "${{ env.APP_VERSION }}"
+            tag_name: "Torzu"
             prerelease: false
             draft: false
             generate_release_notes: false
