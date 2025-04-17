@@ -7,10 +7,6 @@ export ARCH="$(uname -m)"
 export HOME=$(realpath "./")
 export pkgver="1.0.15"
 
-VERSION="${pkgver}"
-echo "${pkgver}" > ${HOME}/version
-echo "$(cat ${HOME}/version)"
-
 URUNTIME="https://github.com/VHSgunzo/uruntime/releases/latest/download/uruntime-appimage-dwarfs-$ARCH"
 SUDACHI="https://github.com/emuplace/sudachi.emuplace.app/releases/download/v${pkgver}/latest.zip"
 
