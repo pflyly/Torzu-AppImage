@@ -117,7 +117,6 @@ echo "$VERSION" >~/version
 cd "${HOME}"
 chmod +x ./appimage-builder.sh
 ./appimage-builder.sh sudachi ./sudachi/build
-rm -rf ./sudachi/build/deploy-linux/sudachi*.AppImage # Delete the generated appimage, cause it's useless now
 
 # turn appdir into appimage
 wget -q "$URUNTIME" -O ./uruntime
