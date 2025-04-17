@@ -5,16 +5,14 @@ set -e
 export APPIMAGE_EXTRACT_AND_RUN=1
 export ARCH="$(uname -m)"
 export HOME=$(realpath "./")
-export pkgver=1.0.15
+export pkgver="1.0.15"
 
 LIB4BN="https://raw.githubusercontent.com/VHSgunzo/sharun/refs/heads/main/lib4bin"
 URUNTIME="https://github.com/VHSgunzo/uruntime/releases/latest/download/uruntime-appimage-dwarfs-$ARCH"
 SUDACHI="https://github.com/emuplace/sudachi.emuplace.app/releases/download/v${pkgver}/latest.zip"
 
-if [ "$1" = 'v3' ]; then
-	echo "Making optimized build of sudachi"
-	ARCH_FLAGS="-march=znver2 -mtune=znver2 -O3 -flto=auto"
-fi
+echo "Making optimized build of sudachi"
+ARCH_FLAGS="-march=znver2 -mtune=znver2 -O3 -flto=auto"
 
 UPINFO="gh-releases-zsync|$(echo "$GITHUB_REPOSITORY" | tr '/' '|')|latest|*$ARCH.AppImage.zsync"
 
