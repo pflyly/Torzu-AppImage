@@ -110,11 +110,10 @@ cmake .. -GNinja \
 	 -DCMAKE_SYSTEM_PROCESSOR="$(uname -m)" \
 	 -DCMAKE_BUILD_TYPE=Release
 ninja
-sudo ninja install
 VERSION="$pkgver"
 echo "$VERSION" >~/version
 
-# NOW MAKE APPIMAGE, use appimage-builder.sh to generate target dir
+# use appimage-builder.sh to generate target dir
 cd "${HOME}"
 chmod +x ./appimage-builder.sh
 ./appimage-builder.sh sudachi ./sudachi/build
