@@ -1,15 +1,13 @@
-# Torzu-AppImage-Optimized-for-Steamdeck
+# Torzu & Sudachi AppImage Optimized for Steamdeck
 
 This repository makes builds with several flags of optimization especially for **Steamdeck**.
 
-* [Latest Release](https://github.com/pflyly/Torzu-AppImage/releases/latest)
+* [Latest Torzu Release](https://github.com/pflyly/Torzu-sudachi-AppImage/releases/tag/Torzu)
+* [Latest Sudachi Release](https://github.com/pflyly/Torzu-sudachi-AppImage/releases/tag/Sudachi)
 
 ---------------------------------------------------------------
 
-In this fork, AppImage made using torzu official AppImage-build.sh directly instead of upstream using [sharun](https://github.com/VHSgunzo/sharun).
-
-**This AppImage aim only for Steamdeck, so we don't need to bundle every lib, which can keep the final appimage as small as possible.**
-
+In this fork, the Torzu AppImage is made using torzu official AppImage-build.sh, and Sudachi Appimage is made using modified appimage-builder.sh of [Citron](https://git.citron-emu.org/Citron/Citron/src/branch/master/appimage-builder.sh) directly instead of upstream using [sharun](https://github.com/VHSgunzo/sharun).
 
 **It also uses the [uruntime](https://github.com/VHSgunzo/uruntime) which makes use of dwarfs, resulting in a smaller and faster AppImage.**
 
