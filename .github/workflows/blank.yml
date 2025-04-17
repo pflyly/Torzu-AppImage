@@ -83,7 +83,7 @@ jobs:
    
     - name: Compile sudachi Optimized
       run: |
-        chmod +x ./*-appimage.sh && ./*-appimage.sh v3
+        chmod +x ./sudachi-appimage.sh && ./sudachi-appimage.sh
         mkdir -p dist
         mv *.AppImage* dist/
 
