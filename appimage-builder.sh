@@ -71,5 +71,5 @@ rm -fv ./AppDir/usr/lib/libwayland-client.so*
 # remove libvulkan because it causes issues with gamescope
 rm -fv ./AppDir/usr/lib/libvulkan.so*
 
-./linuxdeploy --appimage-extract
-./squashfs-root/plugins/linuxdeploy-plugin-appimage/usr/bin/appimagetool ./AppDir -g
+# Copying libsdl3 to the already done appdir
+cp /usr/lib/libSDL3.so* ./AppDir/usr/lib/ 
