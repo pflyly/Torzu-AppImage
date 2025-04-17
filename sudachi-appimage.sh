@@ -7,7 +7,6 @@ export ARCH="$(uname -m)"
 export HOME=$(realpath "./")
 export pkgver="1.0.15"
 
-LIB4BN="https://raw.githubusercontent.com/VHSgunzo/sharun/refs/heads/main/lib4bin"
 URUNTIME="https://github.com/VHSgunzo/uruntime/releases/latest/download/uruntime-appimage-dwarfs-$ARCH"
 SUDACHI="https://github.com/emuplace/sudachi.emuplace.app/releases/download/v${pkgver}/latest.zip"
 
@@ -108,8 +107,9 @@ cmake .. -GNinja \
 	 -DCMAKE_SYSTEM_PROCESSOR="$(uname -m)" \
 	 -DCMAKE_BUILD_TYPE=Release
 ninja
+
 VERSION="${pkgver}"
-echo "$VERSION" >~/version
+echo "1.0.15" >~/version
 
 # use appimage-builder.sh to generate target dir
 cd "${HOME}"
