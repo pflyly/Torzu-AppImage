@@ -130,7 +130,7 @@ echo "Generating AppImage..."
 	--no-history --no-create-timestamp \
 	--compression zstd:level=22 -S26 -B32 \
 	--header uruntime \
-	-i ./sudachi/build/deploy-linux/AppDir -o sudachi-"$VERSION"-steamdeck-"$ARCH".AppImage
+	-i ./sudachi/build/deploy-linux/AppDir -o sudachi-v${pkgver}-steamdeck-"$ARCH".AppImage
 
 echo "Generating zsync file..."
 zsyncmake *.AppImage -u *.AppImage
