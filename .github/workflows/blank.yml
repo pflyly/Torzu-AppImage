@@ -1,4 +1,4 @@
-name: sudachi
+name: Build Sudachi
 concurrency:
   group: build-${{ github.ref }}
   cancel-in-progress: true
@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  Sudachi_build:
     runs-on: ubuntu-22.04
     container: artixlinux/artixlinux:latest
     steps:
@@ -106,7 +106,7 @@ jobs:
     
   release:
       name: "release"
-      needs: [build]
+      needs: [Sudachi_build]
       permissions: write-all
       runs-on: ubuntu-latest
 
