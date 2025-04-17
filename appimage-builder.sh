@@ -73,5 +73,8 @@ rm -fv ./AppDir/usr/lib/libwayland-client.so*
 # remove libvulkan because it causes issues with gamescope
 rm -fv ./AppDir/usr/lib/libvulkan.so*
 
+# fix steamdeck launch error
+rm -fv ./AppDir/usr/lib/libharfbuzz-subset.so*
+
 # Copying libsdl3 to the already done appdir
 cp /usr/lib/libSDL3.so* ./AppDir/usr/lib/ 
