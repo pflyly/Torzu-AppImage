@@ -49,6 +49,8 @@ DESTDIR="${DEPLOY_LINUX_APPDIR_FOLDER}" ninja install
 
 cd "${DEPLOY_LINUX_FOLDER}"
 
+dos2unix ./AppDir/usr/share/applications/org.sudachi_emu.sudachi.desktop
+
 curl -fsSLo ./linuxdeploy "https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-${CPU_ARCH}.AppImage"
 chmod +x ./linuxdeploy
 
