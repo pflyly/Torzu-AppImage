@@ -110,7 +110,7 @@ cmake .. -GNinja \
 	 -DCMAKE_SYSTEM_PROCESSOR="$(uname -m)" \
 	 -DCMAKE_BUILD_TYPE=Release
 ninja
-VERSION="$pkgver"
+VERSION="${pkgver}"
 echo "$VERSION" >~/version
 
 # use appimage-builder.sh to generate target dir
