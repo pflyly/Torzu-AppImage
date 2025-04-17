@@ -86,11 +86,6 @@ jobs:
         chmod +x ./sudachi-appimage.sh && ./sudachi-appimage.sh
         mkdir -p dist
         mv *.AppImage* dist/
-
-    - name: Check version file
-      run: |
-       cat ${HOME}/version
-       echo "APP_VERSION=$(cat ${HOME}/version)" >> "${GITHUB_ENV}"
     
     - name: Upload artifact
       uses: actions/upload-artifact@v4.6.1
