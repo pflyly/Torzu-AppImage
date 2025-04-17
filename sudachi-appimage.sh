@@ -88,23 +88,24 @@ git submodule add https://github.com/libsdl-org/sdl externals/SDL3
 git submodule update --init --recursive
 
 cd externals/cpp-httplib && git checkout 65ce51aed7f15e40e8fb6d2c0a8efb10bcb40126
+cd "${HOME}"/sudachi/externals/xbyak && git checkout v6.68
 
 cd "${HOME}"/sudachi
 mkdir build
 cd build
 cmake .. -GNinja \
 	 -DSUDACHI_USE_BUNDLED_VCPKG=ON \
+  	 -DENABLE_SDL3=ON \
          -DENABLE_QT6=ON \
-	 -DSUDACHI_USE_BUNDLED_QT=OFF \
+	 -DSUDACHI_USE_QT_WEB_ENGINE=ON \
 	 -DSUDACHI_USE_BUNDLED_FFMPEG=ON \
-         -DSUDACHI_USE_BUNDLED_SDL3=ON \
 	 -DSUDACHI_TESTS=OFF \
 	 -DSUDACHI_CHECK_SUBMODULES=OFF \
 	 -DENABLE_QT_TRANSLATION=ON \
 	 -DSUDACHI_ENABLE_LTO=ON \
   	 -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
 	 -DCMAKE_INSTALL_PREFIX=/usr \
-	 -DCMAKE_CXX_FLAGS="$ARCH_FLAGS -Wno-unused-variable" \
+	 -DCMAKE_CXX_FLAGS="$ARCH_FLAGS -Wno-error -w" \
 	 -DCMAKE_C_FLAGS="$ARCH_FLAGS" \
 	 -DCMAKE_SYSTEM_PROCESSOR="$(uname -m)" \
 	 -DCMAKE_BUILD_TYPE=Release
