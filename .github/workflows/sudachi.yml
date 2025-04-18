@@ -8,6 +8,7 @@ on:
 
 jobs:
   Sudachi_build:
+    name: Sudachi AppImage
     runs-on: ubuntu-22.04
     container: artixlinux/artixlinux:latest
     steps:
@@ -80,7 +81,10 @@ jobs:
           dos2unix \
           boost-libs \
           qt5ct
-   
+    - name: Install debloated dependencies
+      run: |
+        chmod +x ./get-dependencies.sh && ./get-dependencies.sh
+        
     - name: Compile sudachi Optimized
       run: |
         chmod +x ./sudachi-appimage.sh && ./sudachi-appimage.sh
