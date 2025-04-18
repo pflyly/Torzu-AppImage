@@ -118,7 +118,7 @@ jobs:
           uses: softprops/action-gh-release@v2
           with:
             name: "Sudachi AppImage for Steamdeck: ${{ env.APP_VERSION }}"
-            tag_name: "Sudachi"
+            tag_name: "Sudachi ${{ env.APP_VERSION }}"
             prerelease: true
             draft: false
             generate_release_notes: false
