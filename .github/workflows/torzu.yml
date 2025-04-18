@@ -75,7 +75,6 @@ jobs:
     - name: Install debloated dependencies
       run: |
         chmod +x ./get-dependencies.sh && ./get-dependencies.sh
-        strings /usr/lib/libstdc++.so.6 | grep CXXABI
 
     - name: Compile Torzu Optimized
       run: |
