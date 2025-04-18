@@ -2,8 +2,6 @@
 
 set -ex
 
-sed -i 's/DownloadUser/#DownloadUser/g' /etc/pacman.conf
-
 if [ "$(uname -m)" = 'x86_64' ]; then
 	PKG_TYPE='x86_64.pkg.tar.zst'
 else
@@ -16,80 +14,6 @@ QT6_URL="https://github.com/pkgforge-dev/llvm-libs-debloated/releases/download/c
 LIBXML_URL="https://github.com/pkgforge-dev/llvm-libs-debloated/releases/download/continuous/libxml2-iculess-$PKG_TYPE"
 OPUS_URL="https://github.com/pkgforge-dev/llvm-libs-debloated/releases/download/continuous/opus-nano-$PKG_TYPE"
 MESA_URL="https://github.com/pkgforge-dev/llvm-libs-debloated/releases/download/continuous/mesa-mini-$PKG_TYPE"
-
-echo "Installing build dependencies..."
-echo "---------------------------------------------------------------"
-pacman -Syu --noconfirm \
-	aom \
-	base-devel \
-	boost \
-	boost-libs \
-	catch2 \
-	clang \
-	cmake \
-	curl \
-	dav1d \
-	desktop-file-utils \
-	doxygen \
-	enet \
-	ffmpeg \
-	ffmpeg4.4 \
-	fmt \
-	gamemode \
-	git \
-	glslang \
-	glu \
-	hidapi \
-	libass \
-	libdecor \
-	libfdk-aac \
-	libopusenc \
-	libva \
-	libvpx \
-	libxi \
-	libxkbcommon-x11 \
-	libxss \
-	libzip \
-	mbedtls \
-	mbedtls2 \
-	mesa \
-	meson \
-	nasm \
-	ninja \
-	nlohmann-json \
-	numactl \
-	patchelf \
-	pipewire-audio \
-	pulseaudio \
-	pulseaudio-alsa \
-	python-pip \
-	qt6-base \
-	qt6ct \
-	qt6-multimedia \
-	qt6-tools \
-	qt6-wayland \
-	sdl2 \
-	strace \
-	unzip \
-	vulkan-headers \
-	vulkan-nouveau \
-	vulkan-radeon \
-	wget \
-	x264 \
-	x265 \
-	xcb-util-image \
-	xcb-util-renderutil \
-	xcb-util-wm \
-	xorg-server-xvfb \
-	zip \
-	zsync
-
-if [ "$(uname -m)" = 'x86_64' ]; then
-	pacman -Syu --noconfirm vulkan-intel haskell-gnutls gcc13 svt-av1
-else
-	pacman -Syu --noconfirm vulkan-freedreno vulkan-panfrost
-fi
-
 
 echo "Installing debloated pckages..."
 echo "---------------------------------------------------------------"
