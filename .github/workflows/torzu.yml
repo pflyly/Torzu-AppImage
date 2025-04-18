@@ -9,8 +9,8 @@ on:
 jobs:
   torzu_build:
     name: Torzu AppImage
-    runs-on: ubuntu-22.04
-    container: artixlinux/artixlinux:latest
+    runs-on: ubuntu-latest
+    container: ghcr.io/pkgforge-dev/archlinux:latest
     steps:
     - uses: actions/checkout@v4
 
@@ -19,10 +19,9 @@ jobs:
       run: |
         sed -i 's/DownloadUser/#DownloadUser/g' /etc/pacman.conf
         pacman -Syu --noconfirm base-devel strace patchelf curl wget \
-          desktop-file-utils git artix-archlinux-support llvm mesa xorg-server-xvfb \
+          desktop-file-utils git llvm mesa xorg-server-xvfb \
           vulkan-radeon vulkan-intel vulkan-nouveau pulseaudio pulseaudio-alsa pipewire 
         pacman-key --init && pacman-key --populate archlinux
-        printf "\n[extra]\nInclude = /etc/pacman.d/mirrorlist-arch\n" | tee -a /etc/pacman.conf
         sudo pacman -Syu --noconfirm \
           zsync \
           catch2 \
@@ -72,11 +71,9 @@ jobs:
           boost-libs \
           qt5ct
    
-    - name: Install debloated llvm-libs
+    - name: Install debloated dependencies
       run: |
-        LLVM="https://github.com/pkgforge-dev/llvm-libs-debloated/releases/download/continuous/llvm-libs-nano-x86_64.pkg.tar.zst"
-        wget "$LLVM" -O ./llvm-libs.pkg.tar.zst
-        pacman -U --noconfirm ./llvm-libs.pkg.tar.zst
+        chmod +x ./get-dependencies.sh && ./get-dependencies.sh
 
     - name: Compile Torzu Optimized
       run: |

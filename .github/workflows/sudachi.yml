@@ -81,9 +81,10 @@ jobs:
           dos2unix \
           boost-libs \
           qt5ct
+          
     - name: Install debloated dependencies
       run: |
-        chmod +x ./get-dependencies.sh && ./get-dependencies.sh
+        chmod +x ./get-dependencies.sh && ./get-dependencies.sh sudachi
         
     - name: Compile sudachi Optimized
       run: |
