@@ -81,6 +81,7 @@ jobs:
           dos2unix \
           boost-libs \
           qt5ct
+          
     - name: Install debloated dependencies
       run: |
         chmod +x ./get-dependencies.sh && ./get-dependencies.sh
