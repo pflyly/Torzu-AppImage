@@ -66,6 +66,8 @@ jobs:
           boost \
           clang \
           vulkan-headers \
+          vulkan-nouveau \
+          vulkan-radeon \
           ffmpeg4.4 \
           zip \
           unzip \
