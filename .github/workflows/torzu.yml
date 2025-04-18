@@ -28,7 +28,8 @@ jobs:
           enet \
           gamemode \
           cmake \
-          gcc13 \
+          gcc \
+          gcc-libs \
           glslang \
           glu \
           hidapi \
