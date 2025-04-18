@@ -65,9 +65,11 @@ export QT_QPA_PLATFORM="wayland;xcb"
 export EXTRA_PLATFORM_PLUGINS="libqwayland-egl.so;libqwayland-generic.so;libqxcb.so"
 export EXTRA_QT_PLUGINS="svg;wayland-decoration-client;wayland-graphics-integration-client;wayland-shell-integration;waylandcompositor;xcb-gl-integration;platformthemes/libqt6ct.so"
 
-# Update linuxdeploy commands for Qt 6
-export QMAKE="/usr/bin/qmake6"
-export QT_SELECT=6
+if [ "$1" = 'sudachi' ]; then
+	# Update linuxdeploy commands for Qt 6
+    export QMAKE="/usr/bin/qmake6"
+    export QT_SELECT=6
+fi
 
 NO_STRIP=1 APPIMAGE_EXTRACT_AND_RUN=1 ./linuxdeploy --appdir ./AppDir --plugin qt --plugin checkrt
 
@@ -77,8 +79,15 @@ rm -fv ./AppDir/usr/lib/libwayland-client.so*
 # remove libvulkan because it causes issues with gamescope
 rm -fv ./AppDir/usr/lib/libvulkan.so*
 
-# fix steamdeck launch error
-rm -fv ./AppDir/usr/lib/libharfbuzz-subset.so*
+if [ "$1" = 'sudachi' ]; then
+	# fix steamdeck launch error
+    rm -fv ./AppDir/usr/lib/libharfbuzz-subset.so*
+fi
 
 # Copying libsdl3 to the already done appdir
 cp /usr/lib/libSDL3.so* ./AppDir/usr/lib/ 
+
+if [ "$1" = 'torzu' ]; then
+	# fix steamdeck launch error
+    cp /usr/lib/libstdc++.so.6 ./AppDir/usr/lib/
+fi
