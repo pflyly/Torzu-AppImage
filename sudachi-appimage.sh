@@ -91,7 +91,7 @@ cd "${HOME}"/sudachi
 mkdir build
 cd build
 cmake .. -GNinja \
-	 -DSUDACHI_USE_BUNDLED_VCPKG=OFF \
+	 -DSUDACHI_USE_BUNDLED_VCPKG=ON \
          -DENABLE_QT6=ON \
 	 -DSUDACHI_USE_BUNDLED_FFMPEG=OFF \
 	 -DSUDACHI_TESTS=OFF \
