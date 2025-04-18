@@ -9,8 +9,8 @@ on:
 jobs:
   torzu_build:
     name: Torzu AppImage
-    runs-on: ubuntu-22.04
-    container: artixlinux/artixlinux:latest
+    runs-on: ubuntu-latest
+    container: ghcr.io/pkgforge-dev/archlinux:latest
     steps:
     - uses: actions/checkout@v4
 
