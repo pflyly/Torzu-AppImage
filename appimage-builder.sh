@@ -49,10 +49,6 @@ DESTDIR="${DEPLOY_LINUX_APPDIR_FOLDER}" ninja install
 
 cd "${DEPLOY_LINUX_FOLDER}"
 
-if [ "$1" = 'sudachi' ]; then
-    dos2unix ./AppDir/usr/share/applications/org.sudachi_emu.sudachi.desktop
-fi
-
 curl -fsSLo ./linuxdeploy "https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-${CPU_ARCH}.AppImage"
 chmod +x ./linuxdeploy
 
@@ -63,6 +59,9 @@ curl -fsSLo ./linuxdeploy-plugin-checkrt.sh https://github.com/darealshinji/linu
 chmod +x ./linuxdeploy-plugin-checkrt.sh
 
 if [ "$1" = 'sudachi' ]; then
+    # fix linuxdeploy error with format of desktop file
+    dos2unix ./AppDir/usr/share/applications/org.sudachi_emu.sudachi.desktop
+    
     # Add Qt 6 specific environment variables
     export QT_QPA_PLATFORM="wayland;xcb"
     export EXTRA_PLATFORM_PLUGINS="libqwayland-egl.so;libqwayland-generic.so;libqxcb.so"
