@@ -4,7 +4,9 @@ concurrency:
   cancel-in-progress: true
 
 on:
-  workflow_dispatch:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch: {}
 
 jobs:
   torzu_build:
@@ -28,7 +30,8 @@ jobs:
           enet \
           gamemode \
           cmake \
-          gcc13 \
+          gcc \
+          gcc-libs \
           glslang \
           glu \
           hidapi \
@@ -43,6 +46,10 @@ jobs:
           qt5-webengine \
           qt5-multimedia \
           qt5-wayland \
+          gst-plugins-base \
+          gst-plugins-good \
+          gst-plugins-bad \
+          gst-plugins-ugly \
           mbedtls2 \
           fmt \
           nlohmann-json \
@@ -124,7 +131,7 @@ jobs:
           uses: softprops/action-gh-release@v2
           with:
             name: "Torzu AppImage for Steamdeck: ${{ env.APP_VERSION }}"
-            tag_name: "torzu/${{ env.APP_VERSION }}"
+            tag_name: "Torzu-${{ env.APP_VERSION }}"
             prerelease: false
             draft: false
             generate_release_notes: false

@@ -49,8 +49,6 @@ DESTDIR="${DEPLOY_LINUX_APPDIR_FOLDER}" ninja install
 
 cd "${DEPLOY_LINUX_FOLDER}"
 
-dos2unix ./AppDir/usr/share/applications/org.sudachi_emu.sudachi.desktop
-
 curl -fsSLo ./linuxdeploy "https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-${CPU_ARCH}.AppImage"
 chmod +x ./linuxdeploy
 
@@ -60,14 +58,19 @@ chmod +x ./linuxdeploy-plugin-qt
 curl -fsSLo ./linuxdeploy-plugin-checkrt.sh https://github.com/darealshinji/linuxdeploy-plugin-checkrt/releases/download/continuous/linuxdeploy-plugin-checkrt.sh
 chmod +x ./linuxdeploy-plugin-checkrt.sh
 
-# Add Qt 6 specific environment variables
-export QT_QPA_PLATFORM="wayland;xcb"
-export EXTRA_PLATFORM_PLUGINS="libqwayland-egl.so;libqwayland-generic.so;libqxcb.so"
-export EXTRA_QT_PLUGINS="svg;wayland-decoration-client;wayland-graphics-integration-client;wayland-shell-integration;waylandcompositor;xcb-gl-integration;platformthemes/libqt6ct.so"
-
-# Update linuxdeploy commands for Qt 6
-export QMAKE="/usr/bin/qmake6"
-export QT_SELECT=6
+if [ "$1" = 'sudachi' ]; then
+    # fix linuxdeploy error with format of desktop file
+    dos2unix ./AppDir/usr/share/applications/org.sudachi_emu.sudachi.desktop
+    
+    # Add Qt 6 specific environment variables
+    export QT_QPA_PLATFORM="wayland;xcb"
+    export EXTRA_PLATFORM_PLUGINS="libqwayland-egl.so;libqwayland-generic.so;libqxcb.so"
+    export EXTRA_QT_PLUGINS="svg;wayland-decoration-client;wayland-graphics-integration-client;wayland-shell-integration;waylandcompositor;xcb-gl-integration;platformthemes/libqt6ct.so"
+    
+    # Update linuxdeploy commands for Qt 6
+    export QMAKE="/usr/bin/qmake6"
+    export QT_SELECT=6
+fi
 
 NO_STRIP=1 APPIMAGE_EXTRACT_AND_RUN=1 ./linuxdeploy --appdir ./AppDir --plugin qt --plugin checkrt
 
@@ -77,8 +80,10 @@ rm -fv ./AppDir/usr/lib/libwayland-client.so*
 # remove libvulkan because it causes issues with gamescope
 rm -fv ./AppDir/usr/lib/libvulkan.so*
 
-# fix steamdeck launch error
-rm -fv ./AppDir/usr/lib/libharfbuzz-subset.so*
+if [ "$1" = 'sudachi' ]; then
+    # fix steamdeck launch error for sudachi
+    rm -fv ./AppDir/usr/lib/libharfbuzz-subset.so*
+fi
 
 # Copying libsdl3 to the already done appdir
 cp /usr/lib/libSDL3.so* ./AppDir/usr/lib/ 
