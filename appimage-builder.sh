@@ -61,17 +61,17 @@ chmod +x ./linuxdeploy-plugin-checkrt.sh
 if [ "$1" = 'sudachi' ]; then
     # fix linuxdeploy error with format of desktop file
     dos2unix ./AppDir/usr/share/applications/org.sudachi_emu.sudachi.desktop
-    
-    # Add Qt 6 specific environment variables
-    export QT_QPA_PLATFORM="wayland;xcb"
-    export EXTRA_PLATFORM_PLUGINS="libqwayland-egl.so;libqwayland-generic.so;libqxcb.so"
-    export EXTRA_QT_PLUGINS="svg;wayland-decoration-client;wayland-graphics-integration-client;wayland-shell-integration;waylandcompositor;xcb-gl-integration;platformthemes/libqt6ct.so"
-    
-    # Update linuxdeploy commands for Qt 6
-    export QMAKE="/usr/bin/qmake6"
-    export QT_SELECT=6
 fi
 
+# Add Qt 6 specific environment variables
+export QT_QPA_PLATFORM="wayland;xcb"
+export EXTRA_PLATFORM_PLUGINS="libqwayland-egl.so;libqwayland-generic.so;libqxcb.so"
+export EXTRA_QT_PLUGINS="svg;wayland-decoration-client;wayland-graphics-integration-client;wayland-shell-integration;waylandcompositor;xcb-gl-integration;platformthemes/libqt6ct.so"
+    
+# Update linuxdeploy commands for Qt 6
+export QMAKE="/usr/bin/qmake6"
+export QT_SELECT=6
+    
 NO_STRIP=1 APPIMAGE_EXTRACT_AND_RUN=1 ./linuxdeploy --appdir ./AppDir --plugin qt --plugin checkrt
 
 # remove libwayland-client because it has platform-dependent exports and breaks other OSes
