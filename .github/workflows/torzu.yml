@@ -42,6 +42,7 @@ jobs:
           libxi \
           libdecor \
           libxrandr \
+          libxss \
           nasm \
           qt5-base \
           qt5-tools \
