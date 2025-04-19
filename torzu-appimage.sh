@@ -32,6 +32,7 @@ mkdir build
 cd build
 cmake .. -GNinja \
 	 -DYUZU_USE_BUNDLED_VCPKG=OFF \
+  	 -DENABLE_QT6=ON \
 	 -DYUZU_USE_BUNDLED_QT=OFF \
 	 -DYUZU_USE_BUNDLED_FFMPEG=OFF \
 	 -DYUZU_TESTS=OFF \
