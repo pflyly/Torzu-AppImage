@@ -4,7 +4,9 @@ concurrency:
   cancel-in-progress: true
 
 on:
-  workflow_dispatch:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch: {}
 
 jobs:
   torzu_build:
@@ -129,7 +131,7 @@ jobs:
           uses: softprops/action-gh-release@v2
           with:
             name: "Torzu AppImage for Steamdeck: ${{ env.APP_VERSION }}"
-            tag_name: "torzu/${{ env.APP_VERSION }}"
+            tag_name: "Torzu-${{ env.APP_VERSION }}"
             prerelease: false
             draft: false
             generate_release_notes: false
