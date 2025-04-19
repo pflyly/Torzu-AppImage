@@ -41,6 +41,7 @@ jobs:
           libxkbcommon-x11 \
           libxi \
           libdecor \
+          libxrandr \
           nasm \
           qt5-base \
           qt5-tools \
