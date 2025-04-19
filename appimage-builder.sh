@@ -80,6 +80,9 @@ cp /usr/lib/libGL.so* ./AppDir/usr/lib/
 cp /usr/lib/libgbm.so* ./AppDir/usr/lib/
 cp /usr/lib/libGLX* ./AppDir/usr/lib/
 cp /usr/lib/libQt6WaylandCompositor.so* ./AppDir/usr/lib/
+cp /usr/lib/libdecor-0.so* ./AppDir/usr/lib/
+cp /usr/lib/libXrandr.so* ./AppDir/usr/lib/
+cp /usr/lib/libXss.so* ./AppDir/usr/lib/
 
 # remove libvulkan because it causes issues with gamescope
 rm -fv ./AppDir/usr/lib/libvulkan.so*
