@@ -49,7 +49,9 @@ DESTDIR="${DEPLOY_LINUX_APPDIR_FOLDER}" ninja install
 
 cd "${DEPLOY_LINUX_FOLDER}"
 
-dos2unix ./AppDir/usr/share/applications/org.sudachi_emu.sudachi.desktop
+if [ "$1" = 'sudachi' ]; then
+    dos2unix ./AppDir/usr/share/applications/org.sudachi_emu.sudachi.desktop
+fi
 
 curl -fsSLo ./linuxdeploy "https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-${CPU_ARCH}.AppImage"
 chmod +x ./linuxdeploy
@@ -66,7 +68,7 @@ export EXTRA_PLATFORM_PLUGINS="libqwayland-egl.so;libqwayland-generic.so;libqxcb
 export EXTRA_QT_PLUGINS="svg;wayland-decoration-client;wayland-graphics-integration-client;wayland-shell-integration;waylandcompositor;xcb-gl-integration;platformthemes/libqt6ct.so"
 
 if [ "$1" = 'sudachi' ]; then
-	# Update linuxdeploy commands for Qt 6
+    # Update linuxdeploy commands for Qt 6
     export QMAKE="/usr/bin/qmake6"
     export QT_SELECT=6
 fi
@@ -81,7 +83,7 @@ rm -fv ./AppDir/usr/lib/libvulkan.so*
 
 if [ "$1" = 'sudachi' ]; then
 	# fix steamdeck launch error
-    rm -fv ./AppDir/usr/lib/libharfbuzz-subset.so*
+    	rm -fv ./AppDir/usr/lib/libharfbuzz-subset.so*
 fi
 
 # Copying libsdl3 to the already done appdir
@@ -89,5 +91,5 @@ cp /usr/lib/libSDL3.so* ./AppDir/usr/lib/
 
 if [ "$1" = 'torzu' ]; then
 	# fix steamdeck launch error
-    cp /usr/lib/libstdc++.so.6 ./AppDir/usr/lib/
+    	cp /usr/lib/libstdc++.so.6 ./AppDir/usr/lib/
 fi
