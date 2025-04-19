@@ -76,11 +76,9 @@ NO_STRIP=1 APPIMAGE_EXTRACT_AND_RUN=1 ./linuxdeploy --appdir ./AppDir --plugin q
 
 # try to fix wayland issue on bazzite
 cp /usr/lib/libwayland-client.so* ./AppDir/usr/lib/
-cp /usr/lib/libEGL.so* ./AppDir/usr/lib/
 cp /usr/lib/libGL.so* ./AppDir/usr/lib/
 cp /usr/lib/libgbm.so* ./AppDir/usr/lib/
-cp /usr/lib/libGLX_mesa.so* ./AppDir/usr/lib/
-cp /usr/lib/libglapi.so* ./AppDir/usr/lib/
+cp /usr/lib/libGLX* ./AppDir/usr/lib/
 cp /usr/lib/libQt6WaylandCompositor.so* ./AppDir/usr/lib/
 
 # remove libvulkan because it causes issues with gamescope
