@@ -82,14 +82,9 @@ rm -fv ./AppDir/usr/lib/libwayland-client.so*
 rm -fv ./AppDir/usr/lib/libvulkan.so*
 
 if [ "$1" = 'sudachi' ]; then
-	# fix steamdeck launch error
-    	rm -fv ./AppDir/usr/lib/libharfbuzz-subset.so*
+    # fix steamdeck launch error for sudachi
+    rm -fv ./AppDir/usr/lib/libharfbuzz-subset.so*
 fi
 
 # Copying libsdl3 to the already done appdir
 cp /usr/lib/libSDL3.so* ./AppDir/usr/lib/ 
-
-if [ "$1" = 'torzu' ]; then
-	# fix steamdeck launch error
-    	cp /usr/lib/libstdc++.so.6 ./AppDir/usr/lib/
-fi
