@@ -44,6 +44,8 @@ jobs:
           qt5-webengine \
           qt5-multimedia \
           qt5-wayland \
+          gst-plugins-base-libs \
+          gst-plugins-good \
           mbedtls2 \
           fmt \
           nlohmann-json \
