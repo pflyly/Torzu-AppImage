@@ -75,7 +75,7 @@ export QT_SELECT=6
 NO_STRIP=1 APPIMAGE_EXTRACT_AND_RUN=1 ./linuxdeploy --appdir ./AppDir --plugin qt --plugin checkrt
 
 # remove libwayland-client because it has platform-dependent exports and breaks other OSes
-rm -fv ./AppDir/usr/lib/libwayland-client.so*
+# rm -fv ./AppDir/usr/lib/libwayland-client.so*
 
 # remove libvulkan because it causes issues with gamescope
 rm -fv ./AppDir/usr/lib/libvulkan.so*
