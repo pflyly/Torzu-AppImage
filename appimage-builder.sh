@@ -74,8 +74,11 @@ export QT_SELECT=6
     
 NO_STRIP=1 APPIMAGE_EXTRACT_AND_RUN=1 ./linuxdeploy --appdir ./AppDir --plugin qt --plugin checkrt
 
-# remove libwayland-client because it has platform-dependent exports and breaks other OSes
-# rm -fv ./AppDir/usr/lib/libwayland-client.so*
+# try to fix wayland issue on bazzite
+cp /usr/lib/libwayland-client.so* ./AppDir/usr/lib/
+cp /usr/lib/libEGL.so* ./AppDir/usr/lib/
+cp /usr/lib/libGL.so* ./AppDir/usr/lib/
+cp /usr/lib/libgbm.so* ./AppDir/usr/lib/
 
 # remove libvulkan because it causes issues with gamescope
 rm -fv ./AppDir/usr/lib/libvulkan.so*
