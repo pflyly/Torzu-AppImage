@@ -62,12 +62,12 @@ chmod +x ./linuxdeploy-plugin-qt
 curl -fsSLo ./linuxdeploy-plugin-checkrt.sh https://github.com/darealshinji/linuxdeploy-plugin-checkrt/releases/download/continuous/linuxdeploy-plugin-checkrt.sh
 chmod +x ./linuxdeploy-plugin-checkrt.sh
 
-# Add Qt 6 specific environment variables
-export QT_QPA_PLATFORM="wayland;xcb"
-export EXTRA_PLATFORM_PLUGINS="libqwayland-egl.so;libqwayland-generic.so;libqxcb.so"
-export EXTRA_QT_PLUGINS="svg;wayland-decoration-client;wayland-graphics-integration-client;wayland-shell-integration;waylandcompositor;xcb-gl-integration;platformthemes/libqt6ct.so"
-
 if [ "$1" = 'sudachi' ]; then
+    # Add Qt 6 specific environment variables
+    export QT_QPA_PLATFORM="wayland;xcb"
+    export EXTRA_PLATFORM_PLUGINS="libqwayland-egl.so;libqwayland-generic.so;libqxcb.so"
+    export EXTRA_QT_PLUGINS="svg;wayland-decoration-client;wayland-graphics-integration-client;wayland-shell-integration;waylandcompositor;xcb-gl-integration;platformthemes/libqt6ct.so"
+    
     # Update linuxdeploy commands for Qt 6
     export QMAKE="/usr/bin/qmake6"
     export QT_SELECT=6
