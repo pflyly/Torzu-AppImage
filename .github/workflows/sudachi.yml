@@ -100,6 +100,7 @@ jobs:
     
   release:
       name: "release"
+      if: ${{ github.ref_name == 'main' }}
       needs: [Sudachi_build]
       permissions: write-all
       runs-on: ubuntu-latest
