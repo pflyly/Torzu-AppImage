@@ -80,10 +80,5 @@ rm -fv ./AppDir/usr/lib/libwayland-client.so*
 # remove libvulkan because it causes issues with gamescope
 rm -fv ./AppDir/usr/lib/libvulkan.so*
 
-if [ "$1" = 'sudachi' ]; then
-    # fix steamdeck launch error for sudachi
-    rm -fv ./AppDir/usr/lib/libharfbuzz-subset.so*
-fi
-
 # Copying libsdl3 to the already done appdir
 cp /usr/lib/libSDL3.so* ./AppDir/usr/lib/ 
