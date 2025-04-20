@@ -91,12 +91,23 @@ jobs:
         chmod +x ./sudachi-appimage.sh && ./sudachi-appimage.sh
         mkdir -p dist
         mv *.AppImage* dist/
+        
+    - name: Check version file
+      run: |
+       cat ~/version
+       echo "APP_VERSION=$(cat ~/version)" >> "${GITHUB_ENV}"
     
     - name: Upload artifact
       uses: actions/upload-artifact@v4.6.1
       with:
         name: AppImage
         path: 'dist'
+
+    - name: Upload version file
+      uses: actions/upload-artifact@v4.6.1
+      with:
+       name: version
+       path: ~/version
     
   release:
       name: "release"
@@ -110,12 +121,16 @@ jobs:
           with:
             name: AppImage
 
-        - name: Create release version
+        - uses: actions/download-artifact@v4.1.9
+          with:
+            name: version
+
+        - name: Read version
           run: |
-            export VERSION="v1.0.15"
+            cat version
+            export VERSION="$(<version)"
             echo "APP_VERSION=${VERSION}" >> "${GITHUB_ENV}"
     
-        #Version Release
         - name: Releaser
           uses: softprops/action-gh-release@v2
           with:
