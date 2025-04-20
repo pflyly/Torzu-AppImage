@@ -4,17 +4,16 @@ set -e
 
 export APPIMAGE_EXTRACT_AND_RUN=1
 export ARCH="$(uname -m)"
-export HOME=$(realpath "./")
-export pkgver="1.0.15"
 
+pkgver="1.0.15"
+HOME_DIR=$(realpath "./")
 URUNTIME="https://github.com/VHSgunzo/uruntime/releases/latest/download/uruntime-appimage-dwarfs-$ARCH"
 SUDACHI="https://github.com/emuplace/sudachi.emuplace.app/releases/download/v${pkgver}/latest.zip"
-
-echo "Making optimized build of sudachi"
+UPINFO="gh-releases-zsync|$(echo "$GITHUB_REPOSITORY" | tr '/' '|')|latest|*$ARCH.AppImage.zsync"
 ARCH_FLAGS="-march=znver2 -mtune=znver2 -O3 -flto=auto"
 
-UPINFO="gh-releases-zsync|$(echo "$GITHUB_REPOSITORY" | tr '/' '|')|latest|*$ARCH.AppImage.zsync"
 
+echo "Making optimized build of sudachi"
 # BUILD SUDACHI
 if [ ! -d ./sudachi ]; then
 	wget -q "$SUDACHI"
@@ -85,9 +84,9 @@ git submodule add https://github.com/libsdl-org/sdl externals/SDL3
 git submodule update --init --recursive
 
 cd externals/cpp-httplib && git checkout 65ce51aed7f15e40e8fb6d2c0a8efb10bcb40126
-cd "${HOME}"/sudachi/externals/xbyak && git checkout v6.68
+cd "${HOME_DIR}"/sudachi/externals/xbyak && git checkout v6.68
 
-cd "${HOME}"/sudachi
+cd "${HOME_DIR}"/sudachi
 mkdir build
 cd build
 cmake .. -GNinja \
@@ -105,9 +104,12 @@ cmake .. -GNinja \
 	 -DCMAKE_SYSTEM_PROCESSOR="$(uname -m)" \
 	 -DCMAKE_BUILD_TYPE=Release
 ninja
+VERSION="${pkgver}"
+echo "$VERSION" >~/version
+echo "$(cat ~/version)"
 
 # use appimage-builder.sh to generate target dir
-cd "${HOME}"
+cd "${HOME_DIR}"
 chmod +x ./appimage-builder.sh
 ./appimage-builder.sh sudachi ./sudachi/build
 
@@ -117,10 +119,7 @@ chmod +x ./uruntime
 
 #Add udpate info to runtime
 echo "Adding update information \"$UPINFO\" to runtime..."
-printf "$UPINFO" > data.upd_info
-llvm-objcopy --update-section=.upd_info=data.upd_info \
-	--set-section-flags=.upd_info=noload,readonly ./uruntime
-printf 'AI\x02' | dd of=./uruntime bs=1 count=3 seek=8 conv=notrunc
+./uruntime --appimage-addupdinfo "$UPINFO"
 
 echo "Generating AppImage..."
 ./uruntime --appimage-mkdwarfs -f \
