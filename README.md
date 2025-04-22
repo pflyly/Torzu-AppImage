@@ -3,8 +3,8 @@
 <!-- [![GitHub Release](https://img.shields.io/github/v/release/pflyly/Torzu-sudachi-AppImage?label=Sudachi%20Release)](https://github.com/pflyly/Torzu-sudachi-AppImage/releases/tag/Sudachi-v1.0.15) -->
 [![GitHub Release](https://img.shields.io/github/v/release/pflyly/Torzu-sudachi-AppImage?label=Torzu%20Release)](https://github.com/pflyly/Torzu-sudachi-AppImage/releases/latest)
 [![GitHub Downloads](https://img.shields.io/github/downloads/pflyly/Torzu-sudachi-AppImage/total?logo=github&label=GitHub%20Downloads)](https://github.com/pflyly/Torzu-sudachi-AppImage/releases)
-[![CI Build Status](https://github.com//pflyly/Torzu-sudachi-AppImage/actions/workflows/sudachi.yml/badge.svg)](https://github.com/pflyly/Citron-AppImage/blob/main/.github/workflows/sudachi.yml)
-[![CI Build Status](https://github.com//pflyly/Torzu-sudachi-AppImage/actions/workflows/torzu.yml/badge.svg)](https://github.com/pflyly/Citron-AppImage/blob/main/.github/workflows/torzu.yml)
+[![CI Build Status](https://github.com//pflyly/Torzu-sudachi-AppImage/actions/workflows/sudachi.yml/badge.svg)](https://github.com/pflyly/Torzu-sudachi-AppImage/actions/workflows/sudachi.yml)
+[![CI Build Status](https://github.com//pflyly/Torzu-sudachi-AppImage/actions/workflows/torzu.yml/badge.svg)](https://github.com/pflyly/Torzu-sudachi-AppImage/actions/workflows/torzu.yml)
 
 
 This repository makes builds with several flags of optimization especially for **Steamdeck**.
