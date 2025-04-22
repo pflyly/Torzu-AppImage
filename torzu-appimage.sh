@@ -5,12 +5,12 @@ set -e
 export APPIMAGE_EXTRACT_AND_RUN=1
 export ARCH="$(uname -m)"
 
+HOME_DIR=$(realpath "./")
 URUNTIME="https://github.com/VHSgunzo/uruntime/releases/latest/download/uruntime-appimage-dwarfs-$ARCH"
+UPINFO="gh-releases-zsync|$(echo "$GITHUB_REPOSITORY" | tr '/' '|')|latest|*$ARCH.AppImage.zsync"
 
 echo "Making optimized build of torzu"
 ARCH_FLAGS="-march=znver2 -mtune=znver2 -O3 -flto=auto"
-
-UPINFO="gh-releases-zsync|$(echo "$GITHUB_REPOSITORY" | tr '/' '|')|latest|*$ARCH.AppImage.zsync"
 
 # Clone the Torzu repository from notabug mirror if it doesn't exist
 if [ ! -d ./torzu ]; then
@@ -52,13 +52,12 @@ ninja
 sudo ninja install
 echo "$VERSION" >~/version
 
-# use appimage-builder.sh to generate target dir
-cd ..
-cd ..
+# use appimage-builder.sh to generate target Appdir
+cd "${HOME_DIR}"
 chmod +x ./appimage-builder.sh
 ./appimage-builder.sh torzu ./torzu/build
 
-# turn build dir into appimage
+# turn Appdir into appimage
 wget -q "$URUNTIME" -O ./uruntime
 chmod +x ./uruntime
 
