@@ -1,6 +1,6 @@
 # Torzu & Sudachi AppImage Optimized for Steamdeck
 
-<!-- [![GitHub Release](https://img.shields.io/github/v/release/pflyly/Torzu-sudachi-AppImage?label=Sudachi%20Release)](https://github.com/pflyly/Torzu-sudachi-AppImage/releases/tag/Sudachi-v1.0.15) -->
+[![GitHub Release](https://img.shields.io/badge/Sudachi-v1.0.15-blue?label=Sudachi%20Release)](https://github.com/pflyly/Torzu-sudachi-AppImage/releases/tag/Sudachi-v1.0.15)
 [![GitHub Release](https://img.shields.io/github/v/release/pflyly/Torzu-sudachi-AppImage?label=Torzu%20Release)](https://github.com/pflyly/Torzu-sudachi-AppImage/releases/latest)
 [![GitHub Downloads](https://img.shields.io/github/downloads/pflyly/Torzu-sudachi-AppImage/total?logo=github&label=GitHub%20Downloads)](https://github.com/pflyly/Torzu-sudachi-AppImage/releases)
 [![CI Build Status](https://github.com//pflyly/Torzu-sudachi-AppImage/actions/workflows/sudachi.yml/badge.svg)](https://github.com/pflyly/Torzu-sudachi-AppImage/actions/workflows/sudachi.yml)
