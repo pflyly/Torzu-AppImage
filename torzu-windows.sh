@@ -28,12 +28,14 @@ mkdir build
 cd build
 cmake .. -G Ninja \
     -DYUZU_TESTS=OFF \
-    -DYUZU_USE_BUNDLED_VCPKG=ON \
     -DENABLE_QT6=ON \
     -DENABLE_WEB_SERVICE=OFF \
     -DYUZU_ENABLE_LTO=ON \
     -DCMAKE_BUILD_TYPE=Release \
-    -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+    -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+    -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake \
+    -DVCPKG_TARGET_TRIPLET=<triplet> \
+    -DVCPKG_MANIFEST_MODE=OFF
 ninja
 
 # Use windeployqt to gather dependencies
