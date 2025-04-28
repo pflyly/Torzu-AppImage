@@ -9,7 +9,7 @@ on:
   workflow_dispatch: {}
 
 jobs:
-  torzu_build:
+  torzu_appimage:
     name: Torzu AppImage
     runs-on: ubuntu-latest
     container: ghcr.io/pkgforge-dev/archlinux:latest
@@ -99,29 +99,126 @@ jobs:
        echo "APP_VERSION=$(cat ~/version)" >> "${GITHUB_ENV}"
     
     - name: Upload artifact
-      uses: actions/upload-artifact@v4.6.1
+      uses: actions/upload-artifact@v4.6.2
       with:
-        name: AppImage
+        name: Torzu-AppImage
         path: 'dist'
         
     - name: Upload version file
-      uses: actions/upload-artifact@v4.6.1
+      uses: actions/upload-artifact@v4.6.2
       with:
        name: version
        path: ~/version
-    
+
+  torzu_windows:
+    name: Torzu Windows (${{ matrix.target }})
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        target: ["msvc", "msys2"]
+    defaults:
+        run:
+          shell: ${{ (matrix.target == 'msys2' && 'msys2 {0}') || 'bash' }}
+    env:
+      OS: windows
+      TARGET: ${{ matrix.target }}
+      CCACHE_DIR: ${{ github.workspace }}/.ccache
+      CCACHE_COMPILERCHECK: content
+      CCACHE_SLOPPINESS: time_macros
+    steps:
+      - uses: actions/checkout@v4
+        
+      - name: Set up cache for vcpkg
+        if: ${{ matrix.target == 'msvc' }}
+        uses: actions/cache@v4
+        with:
+          path: C:\Users\runneradmin\AppData\Local\vcpkg\archives
+          key: ${{ runner.os }}-${{ matrix.target }}-vcpkg-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-${{ matrix.target }}-vcpkg-
+            
+      - name: Set up cache for build
+        uses: actions/cache@v4
+        with:
+            path: ${{ env.CCACHE_DIR }}
+            key: ${{ runner.os }}-${{ matrix.target }}-ccache-${{ github.sha }}
+            restore-keys: |
+                ${{ runner.os }}-${{ matrix.target }}-ccache-
+            
+      - name: Set up MSVC
+        if: ${{ matrix.target == 'msvc' }}
+        uses: ilammy/msvc-dev-cmd@v1
+       
+      - name: Install extra tools (MSVC)
+        if: ${{ matrix.target == 'msvc' }}
+        run: choco install cmake ccache ninja wget zip -y
+        
+      - name: Install Qt (MSVC)
+        if: ${{ matrix.target == 'msvc' }}
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: '6.8.3'
+          host: 'windows'
+          target: 'desktop'
+          arch: 'win64_msvc2022_64'
+          cache: 'true'
+        
+      - name: Install vulkan-sdk (MSVC)
+        if: ${{ matrix.target == 'msvc' }}
+        run: |
+           wget https://sdk.lunarg.com/sdk/download/1.4.309.0/windows/VulkanSDK-1.4.309.0-Installer.exe -O D:/a/_temp/vulkan.exe
+           D:/a/_temp/vulkan.exe --accept-licenses --default-answer --confirm-command install
+           echo "VULKAN_SDK=C:/VulkanSDK/1.4.309.0" >> $GITHUB_ENV
+           echo "PATH=C:/VulkanSDK/1.4.309.0/Bin:$PATH" >> $GITHUB_ENV
+          
+      - name: Set up MSYS2
+        if: ${{ matrix.target == 'msys2' }}
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+          update: false
+          install: git make p7zip autoconf libtool autoconf-archive base-devel zip unzip automake-wrapper automake
+          pacboy: >-
+            toolchain:p ccache:p cmake:p ninja:p spirv-tools:p glslang:p libzip:p lz4:p
+            qt6:p boost:p nlohmann_json:p openssl:p ffmpeg:p fmt:p mbedtls:p 
+            opus:p qt5:p zlib:p zstd:p sdl3:p rapidjson:p python-pip:p
+          
+      - name: Disable line ending translation
+        run: git config --global core.autocrlf input
+        
+      - name: Compile Torzu ${{ matrix.target }}
+        run: |
+          chmod +x ./torzu-windows.sh
+          ./torzu-windows.sh ${{ matrix.target }}
+          
+      - name: Upload
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name: Torzu-${{ env.OS }}-${{ matrix.target }}
+          path: torzu/build/artifacts/
+          
   release:
       name: "release"
       if: ${{ github.ref_name == 'main' }}
-      needs: [torzu_build]
+      needs: [torzu_appimage, torzu_windows]
       permissions: write-all
       runs-on: ubuntu-latest
 
       steps:
         - uses: actions/download-artifact@v4.1.9
           with:
-            name: AppImage
-        - uses: actions/download-artifact@v4.1.9
+            name: Torzu-AppImage
+            
+        - uses: actions/download-artifact@v4.3.0
+          with:
+            name: Torzu-windows-msvc
+            
+        - uses: actions/download-artifact@v4.3.0
+          with:
+            name: Torzu-windows-msys2
+            
+        - uses: actions/download-artifact@v4.3.0
           with:
             name: version
 
@@ -130,17 +227,25 @@ jobs:
             cat version
             export VERSION="$(<version)"
             echo "APP_VERSION=${VERSION}" >> "${GITHUB_ENV}"
+            echo "date=$(date +'%Y-%m-%d')" >> "$GITHUB_ENV"
+        - name: Delete same tag release
+          run: |
+            gh release delete "Torzu-${{ env.date }}-${{ env.APP_VERSION }}" --repo "${GITHUB_REPOSITORY}" --cleanup-tag  -y
+            sleep 5
+          env:
+            GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          continue-on-error: true          
     
         #Version Release
         - name: Continuous Releaser
           uses: softprops/action-gh-release@v2
           with:
-            name: "Torzu AppImage for Steamdeck: ${{ env.APP_VERSION }}"
-            tag_name: "Torzu-${{ env.APP_VERSION }}"
+            name: "Torzu Nightly: ${{ env.APP_VERSION }}"
+            tag_name: "Torzu-${{ env.date }}-${{ env.APP_VERSION }}"
             prerelease: false
             draft: false
             generate_release_notes: false
             make_latest: true
             files: |
-              *.AppImage*
+              *.AppImage*, *.zip
           continue-on-error: false
