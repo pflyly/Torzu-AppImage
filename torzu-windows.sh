@@ -19,6 +19,8 @@ case "$1" in
         ;;
     msys2)
         echo "Making Torzu for Windows (MSYS2)"
+        export VCPKG_DEFAULT_HOST_TRIPLET=x64-mingw-static
+        export VCPKG_DEFAULT_TRIPLET=x64-mingw-static
         TARGET="Windows-MSYS2"
         ;;
 esac
@@ -28,6 +30,8 @@ mkdir build
 cd build
 cmake .. -G Ninja \
     -DYUZU_TESTS=OFF \
+    -DENABLE_QT6=ON \
+    -DENABLE_WEB_SERVICE=OFF \
     -DYUZU_ENABLE_LTO=ON \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_C_COMPILER_LAUNCHER=ccache \
@@ -40,8 +44,7 @@ ccache -s -v
 EXE_PATH=./bin/torzu.exe
 mkdir deploy
 cp -r ./bin deploy/
-WINDEPLOYQT_BIN=$(find_windeployqt)
-"$WINDEPLOYQT_BIN" --release --no-compiler-runtime --no-transitive-include-plugins --dir deploy "$EXE_PATH"
+windeployqt --release --no-compiler-runtime --no-transitive-include-plugins --dir deploy "$EXE_PATH"
 
 if [ "$1" = "msys2" ]; then
     if command -v strip >/dev/null 2>&1; then
