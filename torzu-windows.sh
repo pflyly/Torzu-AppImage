@@ -19,6 +19,8 @@ case "$1" in
         ;;
     msys2)
         echo "Making Torzu for Windows (MSYS2)"
+        sed -i '1ifind_program(BASH_EXECUTABLE bash REQUIRED)' externals/libusb/CMakeLists.txt
+        sed -i 's/sh .\/bootstrap.sh/${BASH_EXECUTABLE} .\/bootstrap.sh/' externals/libusb/CMakeLists.txt
         TARGET="Windows-MSYS2"
         ;;
 esac
