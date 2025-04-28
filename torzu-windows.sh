@@ -30,6 +30,7 @@ mkdir build
 cd build
 cmake .. -G Ninja \
     -DYUZU_TESTS=OFF \
+    -DYUZU_USE_BUNDLED_VCPKG=OFF \
     -DENABLE_QT6=ON \
     -DENABLE_WEB_SERVICE=OFF \
     -DYUZU_ENABLE_LTO=ON \
