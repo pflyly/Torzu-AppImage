@@ -19,10 +19,7 @@ case "$1" in
         ;;
     msys2)
         echo "Making Torzu for Windows (MSYS2)"
-        (
-          cd externals/libusb/libusb
-          bash ./bootstrap.sh
-        )
+        sed -i 's/COMMAND[ \t]*sh/COMMAND bash/' externals/libusb/CMakeLists.txt
         TARGET="Windows-MSYS2"
         ;;
 esac
