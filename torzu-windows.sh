@@ -32,9 +32,7 @@ cmake .. -G Ninja \
     -DENABLE_WEB_SERVICE=OFF \
     -DYUZU_ENABLE_LTO=ON \
     -DCMAKE_BUILD_TYPE=Release \
-    -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
-    -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake \
-    -DVCPKG_TARGET_TRIPLET=x64-windows-release
+    -DCMAKE_POLICY_VERSION_MINIMUM=3.5
 ninja
 
 # Use windeployqt to gather dependencies
