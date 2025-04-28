@@ -194,11 +194,14 @@ jobs:
            echo "PATH=C:/VulkanSDK/1.4.309.0/Bin:$PATH" >> $GITHUB_ENV
         
       - name: Set up vcpkg
-        uses: microsoft/vcpkg-action@v6
+        id: vcpkg
+        uses: johnwason/vcpkg-action@v6
         with:
-          vcpkgDirectory: ${{ github.workspace }}/vcpkg
-          cacheKey: ${{ runner.os }}-vcpkg-${{ hashFiles('**/vcpkg.json') }}
-          cacheHitOutput: vcpkg-cache-hit
+          cache-key: ${{ runner.os }}-vcpkg-${{ hashFiles('**/vcpkg.json') }}
+          manifest-dir: ${{ github.workspace }}
+          triplet: x64-windows-release
+          github-binarycache: true
+          token: ${{ github.token }}
           
       - name: Set up MSYS2
         if: ${{ matrix.target == 'msys2' }}
