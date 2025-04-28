@@ -109,11 +109,52 @@ jobs:
       with:
        name: version
        path: ~/version
-    
+       
+  android: 
+    runs-on: ubuntu-latest
+    name: "Torzu nightly (android)"
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install ccache apksigner glslang-tools libvulkan-dev -y
+          
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: 21
+          
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-read-only: false
+        
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v2
+        
+      - name: Accept Android SDK Licenses
+        run:  |
+          yes | sdkmanager --licenses
+          sdkmanager "ndk;26.3.11579264" "cmake;3.22.1"
+
+      - name: Compile Torzu android
+        run: |
+          chmod +x ./torzu-android.sh
+          ./torzu-android.sh
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4.6.1
+        with:
+          name: android-universal
+          path: torzu/src/android/artifacts/
+          
   release:
       name: "release"
       if: ${{ github.ref_name == 'main' }}
-      needs: [torzu_build]
+      needs: [torzu_build, android]
       permissions: write-all
       runs-on: ubuntu-latest
 
@@ -121,6 +162,12 @@ jobs:
         - uses: actions/download-artifact@v4.1.9
           with:
             name: AppImage
+            
+        - uses: actions/download-artifact@v4.1.9
+        
+          with:
+            name: android-universal
+            
         - uses: actions/download-artifact@v4.1.9
           with:
             name: version
@@ -130,17 +177,25 @@ jobs:
             cat version
             export VERSION="$(<version)"
             echo "APP_VERSION=${VERSION}" >> "${GITHUB_ENV}"
-    
-        #Version Release
-        - name: Continuous Releaser
+            echo "date=$(date +'%Y-%m-%d')" >> "$GITHUB_ENV"
+            
+        - name: Delete same tag release
+          run: |
+            gh release delete "Torzu-${{ env.date }}-${{ env.APP_VERSION }}" --repo "${GITHUB_REPOSITORY}" --cleanup-tag  -y
+            sleep 5
+          env:
+            GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          continue-on-error: true               
+
+        - name: Nightly Releaser
           uses: softprops/action-gh-release@v2
           with:
-            name: "Torzu AppImage for Steamdeck: ${{ env.APP_VERSION }}"
-            tag_name: "Torzu-${{ env.APP_VERSION }}"
+            name: "Torzu Nightly: ${{ env.APP_VERSION }}"
+            tag_name: "Torzu-${{ env.date }}-${{ env.APP_VERSION }}"
             prerelease: false
             draft: false
             generate_release_notes: false
             make_latest: true
             files: |
-              *.AppImage*
+              *.AppImage*, *.apk
           continue-on-error: false
