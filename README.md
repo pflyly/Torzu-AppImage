@@ -9,6 +9,10 @@
 
 This repository makes builds with several flags of optimization especially for **Steamdeck**.
 
+
+> [!NEW]
+> **Now added APK release for Torzu!!**
+
 * [Latest Torzu Release](https://github.com/pflyly/Torzu-sudachi-AppImage/releases/latest)
 * [Latest Sudachi Release](https://github.com/pflyly/Torzu-sudachi-AppImage/releases/tag/Sudachi-v1.0.15)
 
