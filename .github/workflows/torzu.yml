@@ -164,9 +164,6 @@ jobs:
     env:
       OS: windows
       TARGET: ${{ matrix.target }}
-      CCACHE_DIR: ${{ github.workspace }}/.ccache
-      CCACHE_COMPILERCHECK: content
-      CCACHE_SLOPPINESS: time_macros
     steps:
       - uses: actions/checkout@v4
         
@@ -179,21 +176,13 @@ jobs:
            restore-keys: |
              ${{ runner.os }}-${{ matrix.target }}-vcpkg-
             
-      - name: Set up cache for build
-        uses: actions/cache@v4
-        with:
-            path: ${{ env.CCACHE_DIR }}
-            key: ${{ runner.os }}-${{ matrix.target }}-ccache-${{ github.sha }}
-            restore-keys: |
-                ${{ runner.os }}-${{ matrix.target }}-ccache-
-            
       - name: Set up MSVC
         if: ${{ matrix.target == 'msvc' }}
         uses: ilammy/msvc-dev-cmd@v1
        
       - name: Install extra tools (MSVC)
         if: ${{ matrix.target == 'msvc' }}
-        run: choco install cmake ccache ninja wget zip -y
+        run: choco install cmake ninja wget zip -y
         
       - name: Install Qt (MSVC)
         if: ${{ matrix.target == 'msvc' }}
