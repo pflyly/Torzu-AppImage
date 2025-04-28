@@ -166,7 +166,16 @@ jobs:
       TARGET: ${{ matrix.target }}
     steps:
       - uses: actions/checkout@v4
-            
+      
+      - name: Set up cache for vcpkg
+        if: ${{ matrix.target == 'msvc' }}
+        uses: actions/cache@v4
+        with:
+            path: 'C:/Users/runneradmin/AppData/Local/vcpkg/archives'
+            key: ${{ runner.os }}-${{ matrix.target }}-vcpkg-${{ github.sha }}
+            restore-keys: |
+              ${{ runner.os }}-${{ matrix.target }}-vcpkg-
+              
       - name: Set up MSVC
         if: ${{ matrix.target == 'msvc' }}
         uses: ilammy/msvc-dev-cmd@v1
@@ -192,16 +201,6 @@ jobs:
            D:/a/_temp/vulkan.exe --accept-licenses --default-answer --confirm-command install
            echo "VULKAN_SDK=C:/VulkanSDK/1.4.309.0" >> $GITHUB_ENV
            echo "PATH=C:/VulkanSDK/1.4.309.0/Bin:$PATH" >> $GITHUB_ENV
-        
-      - name: Set up vcpkg
-        id: vcpkg
-        uses: johnwason/vcpkg-action@v6
-        with:
-          cache-key: ${{ runner.os }}-vcpkg-${{ hashFiles('**/vcpkg.json') }}
-          manifest-dir: ${{ github.workspace }}
-          triplet: x64-windows-release
-          github-binarycache: true
-          token: ${{ github.token }}
           
       - name: Set up MSYS2
         if: ${{ matrix.target == 'msys2' }}
