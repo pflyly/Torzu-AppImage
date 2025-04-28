@@ -11,6 +11,7 @@
         "boost-container",
         "boost-context",
         "boost-crc",
+        "boost-fiber",
         "boost-functional",
         "boost-heap",
         "boost-icl",
