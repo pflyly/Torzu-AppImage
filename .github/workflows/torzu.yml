@@ -129,13 +129,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         
-      - name: Set up vcpkg
+      - name: Set up cache for vcpkg
         if: ${{ matrix.target == 'msvc' }}
-        uses: lukka/run-vcpkg@v11
+        uses: actions/cache@v4
         with:
-          runVcpkgInstall: true
-          vcpkgJsonGlob: '**/vcpkg.json'
-          doNotCache: false
+           path: '${{ env.LOCALAPPDATA }}/vcpkg/archives'
+           key: ${{ runner.os }}-${{ matrix.target }}-vcpkg-${{ github.sha }}
+           restore-keys: |
+             ${{ runner.os }}-${{ matrix.target }}-vcpkg-
             
       - name: Set up cache for build
         uses: actions/cache@v4
