@@ -133,7 +133,7 @@ jobs:
         if: ${{ matrix.target == 'msvc' }}
         uses: actions/cache@v4
         with:
-           path: '${{ env.LOCALAPPDATA }}/vcpkg/archives'
+           path: 'C:/Users/runneradmin/AppData/Local/vcpkg/archives'
            key: ${{ runner.os }}-${{ matrix.target }}-vcpkg-${{ github.sha }}
            restore-keys: |
              ${{ runner.os }}-${{ matrix.target }}-vcpkg-
