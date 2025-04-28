@@ -33,11 +33,8 @@ cmake .. -G Ninja \
     -DENABLE_WEB_SERVICE=OFF \
     -DYUZU_ENABLE_LTO=ON \
     -DCMAKE_BUILD_TYPE=Release \
-    -DCMAKE_C_COMPILER_LAUNCHER=ccache \
-    -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
     -DCMAKE_POLICY_VERSION_MINIMUM=3.5
 ninja
-ccache -s -v
 
 # Use windeployqt to gather dependencies
 EXE_PATH=./bin/torzu.exe
