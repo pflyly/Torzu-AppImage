@@ -19,8 +19,6 @@ case "$1" in
         ;;
     msys2)
         echo "Making Torzu for Windows (MSYS2)"
-        export VCPKG_DEFAULT_HOST_TRIPLET=x64-mingw-static
-        export VCPKG_DEFAULT_TRIPLET=x64-mingw-static
         TARGET="Windows-MSYS2"
         ;;
 esac
