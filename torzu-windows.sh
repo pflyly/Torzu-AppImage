@@ -29,7 +29,6 @@ cd build
 cmake .. -G Ninja \
     -DYUZU_TESTS=OFF \
     -DENABLE_QT6=ON \
-    -DENABLE_WEB_SERVICE=OFF \
     -DYUZU_ENABLE_LTO=ON \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_POLICY_VERSION_MINIMUM=3.5
