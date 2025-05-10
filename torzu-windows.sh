@@ -39,7 +39,7 @@ ninja
 EXE_PATH=./bin/torzu.exe
 mkdir deploy
 cp -r ./bin deploy/
-windeployqt --release --no-compiler-runtime --no-transitive-include-plugins --dir deploy "$EXE_PATH"
+windeployqt --release --no-compiler-runtime --dir deploy "$EXE_PATH"
 
 if [ "$1" = "msys2" ]; then
     if command -v strip >/dev/null 2>&1; then
