@@ -1,5 +1,5 @@
 #!/bin/bash -ex
-git clone --branch libusb --single-branch https://github.com/pflyly/torzu-mirror.git ./torzu
+git clone https://github.com/pflyly/torzu-mirror.git ./torzu
 
 cd ./torzu
 git submodule update --init --recursive
